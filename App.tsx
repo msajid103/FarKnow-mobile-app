@@ -1,14 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import HomeScreen from './screens/HomeScreen'
-
-//Navigation
 import { NavigationContainer } from '@react-navigation/native' 
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import { Easing } from 'react-native-reanimated';
 import ChatScreen from './screens/ChatScreen'
-import User from './components/User'
 import FriendsScreen from './screens/FriendsScreen'
 import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
@@ -24,21 +21,48 @@ export type RootStackParamList = {
  
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+// const Stack = createNativeStackNavigator<RootStackParamList>()
+const Stack = createSharedElementStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
+       <Stack.Navigator
+        initialRouteName="Splash"
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {
+                duration: 500,
+                easing: Easing.out(Easing.ease), // Ease out curve
+              },
+            },
+            close: {
+              animation: 'timing',
+              config: {
+                duration: 500,
+                easing: Easing.out(Easing.ease), // Ease out curve
+              },
+            },
+          },
+          cardStyleInterpolator: ({ current: { progress } }) => {
+            return {
+              cardStyle: {
+                opacity: progress,
+              },
+            };
+          },
+        }}
+      >
         <Stack.Screen
         name='Splash'
-        component={SplashScreen} 
-        options={{
-          headerShown: false, 
-        }}     
+        component={SplashScreen}           
         />
         <Stack.Screen name='SocialLogin' component={SocialLoginScreen}
          options={{
-          headerShown:false,
+          headerShown:false        
         }}/>
         <Stack.Screen name='Login' component={LoginScreen}
         options={{

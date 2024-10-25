@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import Logo from '../components/Logo';
 import Animated from 'react-native-reanimated';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const SocialLoginScreen = ({navigation}) => {
   return (
@@ -10,14 +11,14 @@ const SocialLoginScreen = ({navigation}) => {
       style={styles.background}
       resizeMode="cover" // or "stretch" or "contain" depending on your needs
     >
-      <Animated.View style={styles.container} sharedTransitionTag="logo">
-            <Logo />
-          </Animated.View>
+       <SharedElement id="logo">
+       <Logo />
+      </SharedElement>     
      <Pressable
      onPress={()=>{
         navigation.navigate('Login')
      }}>
-     <Text style={{color:'black',backgroundColor:'orange',paddingVertical:12, paddingHorizontal:50}}>Sajid</Text>
+     <Text style={{color:'black',backgroundColor:'orange',paddingVertical:12, paddingHorizontal:50}}>Login Using Email</Text>
      </Pressable>
     </ImageBackground>
   );
@@ -33,4 +34,7 @@ const styles = StyleSheet.create({
 
 });
 
+SocialLoginScreen.sharedElements = () => {
+  return [{ id: 'logo' }];
+};
 export default SocialLoginScreen;

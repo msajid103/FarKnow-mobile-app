@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Button, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, ImageBackground } from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
-
+import { SharedElement } from 'react-navigation-shared-element';
 import Animated from 'react-native-reanimated';
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -13,29 +13,24 @@ const SplashScreen = ({ navigation }) => {
     return () => clearTimeout(timer);
   }, [navigation]);
   return (
-    <>
-      <Background />
-      <View style={styles.logo}>
-          <Animated.View style={styles.container} sharedTransitionTag="logo">
-            <Logo />
-          </Animated.View>
-      
-      </View>
-
-
-
-    </>
+    <ImageBackground
+      source={require('../assets/background.png')}
+      style={styles.background}
+      resizeMode="cover"
+    >    
+      <SharedElement style={{ marginBottom: 150} } id="logo">
+        <Logo />
+      </SharedElement>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  logo: {
-    position: 'absolute',
-    top: '44%',
-    left: '50%',
-    transform: [{ translateX: -140 }, { translateY: -150 }],
+  background: {
+    flex: 1,
+    alignItems: 'center', 
+    justifyContent: 'center'
   },
-
 });
 
 export default SplashScreen;

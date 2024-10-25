@@ -1,24 +1,15 @@
 import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable } from 'react-native'
-import React, { Component, useState } from 'react'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
-
+import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-
 import { RootStackParamList } from '../App'
-import Logo from '../components/Logo'
-import Animated from 'react-native-reanimated';
-
-
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 const LoginScreen = ({ navigation }: LoginProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white', marginTop: -30, alignItems: 'center' }}>
-            <Animated.View style={styles.container} sharedTransitionTag="logo">
-                <Logo />
-            </Animated.View>
+        <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 150, alignItems: 'center' }}>
+          
             <KeyboardAvoidingView>
                 <View style={styles.container}>
                     <Pressable
