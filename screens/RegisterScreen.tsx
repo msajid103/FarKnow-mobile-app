@@ -1,77 +1,105 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable } from 'react-native'
-import React, {useState } from 'react'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../App'
+import { Alert, Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import auth from "@react-native-firebase/auth";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
 
-type SigUpProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>
-const RegisterScreen = ({navigation}: SigUpProps) => {
+type SignUpProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
+
+const RegisterScreen = ({ navigation }: SignUpProps) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    function handleRegister() {
+        if (password !== confirmPassword) {
+            Alert.alert("Error", "Passwords do not match.");
+            return;
+        }
+
+        auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                Alert.alert(
+                    "Registration Successful",
+                    "You have registered successfully!",
+                    [
+                        { text: "OK", onPress: () => navigation.navigate("Login") }
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch(e => {
+                if (e.code === 'auth/email-already-in-use') {
+                    Alert.alert("Already Exist", "This Email Already in Use.");
+                } else if (e.code === 'auth/invalid-email') {
+                    Alert.alert("Invalid Email", "Enter a Valid Email.");
+                } else {
+                    Alert.alert("Registration Failed", `Error: ${e.message}`);
+                }
+            });
+    }
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white', padding: 10, alignItems: 'center' }}>
-            <KeyboardAvoidingView>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', padding: 10 }}>
                 <View style={styles.container}>
                     <Text style={styles.TextHeading}>Sign Up</Text>
-                    <Text style={styles.Text} >Create Your New Account </Text>
+                    <Text style={styles.Text}>Create Your New Account</Text>
                 </View>
                 <View style={{ marginTop: 50 }}>
                     <Text style={styles.InputText}>Full Name</Text>
                     <TextInput
                         value={name}
-                        onChangeText={(text) => setName(text)}
+                        onChangeText={setName}
                         style={styles.InputPlaceholder}
-                        placeholder='Enter Your Full Name' />
+                        placeholder='Enter Your Full Name'
+                    />
                 </View>
                 <View style={{ marginTop: 15 }}>
                     <Text style={styles.InputText}>Email</Text>
                     <TextInput
                         value={email}
-                        onChangeText={(text) => setEmail(text)}
+                        onChangeText={setEmail}
                         style={styles.InputPlaceholder}
-                        placeholder='Enter Your Email' />
+                        placeholder='Enter Your Email'
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
                 </View>
                 <View style={{ marginTop: 15 }}>
                     <Text style={styles.InputText}>Password</Text>
                     <TextInput
                         value={password}
-                        secureTextEntry={true}
-                        onChangeText={(text) => setPassword(text)}
+                        secureTextEntry
+                        onChangeText={setPassword}
                         style={styles.InputPlaceholder}
-                        placeholder='Enter Password' />
+                        placeholder='Enter Password'
+                    />
                 </View>
                 <View style={{ marginTop: 15 }}>
                     <Text style={styles.InputText}>Confirm Password</Text>
                     <TextInput
-                        value={password}
-                        secureTextEntry={true}
-                        onChangeText={(text) => setPassword(text)}
+                        value={confirmPassword}
+                        secureTextEntry
+                        onChangeText={setConfirmPassword}
                         style={styles.InputPlaceholder}
-                        placeholder='Confirm Your Password' />
+                        placeholder='Confirm Your Password'
+                    />
                 </View>
-                <Pressable style={styles.btn}
-                 onPress={()=>{
-                    navigation.navigate("Login")
-                }}>
-                    <Text style={styles.btn_text}>
-                        Sign Up
+                <Pressable style={styles.btn} onPress={handleRegister}>
+                    <Text style={styles.btn_text}>Sign Up</Text>
+                </Pressable>
+                <Pressable style={{ marginTop: 20 }} onPress={() => navigation.navigate("Login")}>
+                    <Text style={{ textAlign: 'center', fontSize: 17 }}>
+                        Already have an account? <Text style={{ color: '#4A55A2' }}>Sign In</Text>
                     </Text>
                 </Pressable>
-                <Pressable style={{marginTop: 20 }}
-                   onPress={()=>{
-                    navigation.navigate("Login")
-                }}>
-                    <Text style={{ textAlign: 'center', fontSize:17}}>
-                        Already have account? <Text style={{ color: '#4A55A2' }}>Sign In</Text>
-                    </Text>
-                </Pressable>
-            </KeyboardAvoidingView>
+            </ScrollView>
         </View>
-    )
+    );
+};
 
-}
 const styles = StyleSheet.create({
     container: {
         marginTop: 80,
@@ -82,7 +110,6 @@ const styles = StyleSheet.create({
         color: '#4A55A2',
         fontSize: 20,
         fontWeight: '600',
-
     },
     Text: {
         color: 'black',
@@ -95,24 +122,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600'
     },
-
     InputPlaceholder: {
         color: 'black',
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
         marginVertical: 5,
         width: 300
-
     },
     btn: {
         backgroundColor: '#4A55A2',
         width: 200,
         padding: 15,
         marginTop: 50,
-        marginLeft: 'auto',
-        marginRight: 'auto',
         borderRadius: 6
-
     },
     btn_text: {
         color: 'white',
@@ -120,7 +142,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600'
     }
-})
-
+});
 
 export default RegisterScreen;

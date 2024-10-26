@@ -20,6 +20,12 @@ const SocialLoginScreen = ({navigation}) => {
      }}>
      <Text style={{color:'black',backgroundColor:'orange',paddingVertical:12, paddingHorizontal:50}}>Login Using Email</Text>
      </Pressable>
+     <Pressable
+     onPress={()=>{
+        navigation.navigate('Test')
+     }}>
+     <Text style={{color:'white',backgroundColor:'blue',paddingVertical:12, paddingHorizontal:50}}>Test Screen</Text>
+     </Pressable>
     </ImageBackground>
   );
 };

@@ -9,19 +9,20 @@ import ChatScreen from './screens/ChatScreen'
 import FriendsScreen from './screens/FriendsScreen'
 import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
+import TestScreen from './screens/TestScreen'
 
 export type RootStackParamList = {
   Splash: undefined;
   SocialLogin:undefined;
   Login: undefined;
   SignUp: undefined;
+  Test: undefined;
   Home: {userId: string};
   Chat: { userName: string; userProfilePic: string };
   Friends: { users: [] }; 
  
 };
 
-// const Stack = createNativeStackNavigator<RootStackParamList>()
 const Stack = createSharedElementStackNavigator<RootStackParamList>();
 const App = () => {
   return (
@@ -95,6 +96,13 @@ const App = () => {
         component={FriendsScreen}
         options={{
           title: 'Add Friends'
+        }}
+        />
+        <Stack.Screen
+        name= 'Test'
+        component={TestScreen}
+        options={{
+          title: 'Test'
         }}
         />
 
