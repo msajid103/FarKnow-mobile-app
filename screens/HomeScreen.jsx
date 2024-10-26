@@ -1,14 +1,14 @@
-import React from 'react';
-import { FlatList, SafeAreaView, StyleSheet, View, TouchableOpacity } from 'react-native';
-import PostCard from '../components/PostCard';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Importing icons
-
+import React, { useEffect, useId, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import PostCard from '../components/Home/PostCard';
+import firestore from '@react-native-firebase/firestore';
+import Header from '../components/Home/Header';
 
 const posts = [
   {
     id: '1',
     userName: 'Nisaar Ali',
-    userProfilePic: 'https://unsplash.com/photos/man-riding-on-carriage--QrOaXkjqmA',
+    userProfilePic: 'https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     text: 'Enjoying a beautiful day!',
     imageUrl: 'https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     likes: 12,
@@ -40,37 +40,66 @@ const posts = [
   // Add more posts here...
 ];
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ route, navigation }) => {
+  const {userId} = route.params;
+  const [userdata, setUserdata] = useState(null);  // Start with null or empty object
+  const [postsData, setPostsData] = useState(null);  // Start with null or empty object
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userDoc = await firestore()
+          .collection('Users')
+          .doc(userId)
+          .get();
+        if (userDoc.exists) {
+          setUserdata({userId,...userDoc.data()}); // Store data in useState
 
-  React.useEffect(() => {
-    navigation.setOptions({
-      // Customize headerRight with three icons (Home, Friends, Chat)
-      headerRight: () => (
-        <View style={styles.headerIcons}>
-          {/* Home Icon */}
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Ionicons name="home-outline" size={25} color="blue" />
-          </TouchableOpacity>
-          {/* Friends Icon */}
-          <TouchableOpacity onPress={() => navigation.navigate('Friends', {
-          users: posts
-         
-        })}>
-            <Ionicons name="people-outline" size={25} color="black" style={styles.iconSpacing} />
-          </TouchableOpacity>
-          {/* Chat Icon */}
-          {/* <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-            <Ionicons name="chatbubble-outline" size={25} color="black" style={styles.iconSpacing} />
-          </TouchableOpacity> */}
-        </View>
-      ),
-    });
-  }, [navigation]);
+        } else {
+          console.log('No such User');
+        }
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      } finally {
+        setLoading(false); // Stop loading once data is fetched
+      }
+    };
+    const fetchPosts = async () => {
+      try {
+        const postsSnapshot = await firestore().collection('Posts').get();
+        const postsData = postsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setPostsData(postsData);
+      } catch (error) {
+        console.log("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchUserData();
+    fetchPosts();
+  }, [userId]);
+
+  // Show loading indicator while fetching data
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#4A55A2" />
+      </SafeAreaView>
+    );
+  }
+
+  
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>      
+      {userdata && (
+        <Header userData={userdata} />
+      )}
       <FlatList
-        data={posts}
+        data={postsData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PostCard post={item} navigation={navigation} />}
       />
@@ -87,6 +116,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   iconSpacing: {
-    marginLeft: 20, // Adds spacing between icons
+    marginLeft: 20,
   },
 });

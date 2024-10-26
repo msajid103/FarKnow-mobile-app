@@ -1,23 +1,40 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable } from 'react-native'
+import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import auth from '@react-native-firebase/auth';
 import { RootStackParamList } from '../App'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 const LoginScreen = ({ navigation }: LoginProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    function handleLogin() {
+        auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const userId = userCredential.user.uid;              
+                navigation.navigate("Home", {userId})
+                return null
+            })
+            .catch(err=>{
+                Alert.alert('Invalid', "Wrong Password or Email",[
+                    { text: "OK", onPress: () => navigation.navigate("Login") }
+                ],
+                { cancelable: false })
+            })
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white', paddingTop: 150, alignItems: 'center' }}>
-          
+
             <KeyboardAvoidingView>
                 <View style={styles.container}>
-                    <Pressable
+                    <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('Splash')
                         }}>
                         <Text style={styles.TextHeading}>Sign In</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                     <Text style={styles.Text} >Sign In to Your Account </Text>
                 </View>
                 <View style={{ marginTop: 50 }}>
@@ -37,24 +54,20 @@ const LoginScreen = ({ navigation }: LoginProps) => {
                         style={styles.InputPlaceholder}
                         placeholder='Enter Password' />
                 </View>
-                <Pressable style={styles.btn}
-                    onPress={() => {
-                        navigation.navigate("Home", {
-                            userId: '3443'
-                        })
-                    }}>
+                <TouchableOpacity style={styles.btn}
+                    onPress={() => handleLogin()}>
                     <Text style={styles.btn_text}>
                         Login
                     </Text>
-                </Pressable>
-                <Pressable style={{ marginTop: 20 }}
+                </TouchableOpacity>
+                <TouchableOpacity style={{ marginTop: 20 }}
                     onPress={() => {
                         navigation.navigate("SignUp")
                     }}>
                     <Text style={{ textAlign: 'center', fontSize: 17 }}>
                         Don't have an account? <Text style={{ color: '#4A55A2' }}>Sign Up</Text>
                     </Text>
-                </Pressable>
+                </TouchableOpacity>
 
             </KeyboardAvoidingView>
         </View>

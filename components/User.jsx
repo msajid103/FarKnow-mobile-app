@@ -1,11 +1,12 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-export default function User({ userName, userProfilePic }) {
+export default function User({ userName }) {
+  console.log('User:', userName)
   return (
     <Pressable style={styles.userCard}>
       <View style={styles.imgContainer}>
-        <Image style={styles.img} source={{ uri: userProfilePic }} />
+        {/* <Image style={styles.img} source={{ uri: userProfilePic }} /> */}
       </View>
       <View style={{ marginLeft: 12, flex: 1 }}>
         <Text style={{ color: 'black', paddingBottom: 2 }}>{userName}</Text>

@@ -1,6 +1,7 @@
-import { Alert, Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable, ScrollView } from 'react-native';
+import { Alert, Text, StyleSheet, View, TouchableOpacity, TextInput, Pressable, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore"
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 
@@ -19,7 +20,20 @@ const RegisterScreen = ({ navigation }: SignUpProps) => {
         }
 
         auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
+            .then((userCredential) => {
+                const userId = userCredential.user.uid
+                return firestore().collection('Users').doc(userId).set({
+                    name,
+                    email,
+                    imageUrl: '',
+                    posts:[],
+                    friends:[],
+                    sendedFriendsRequest:[],
+                    receivedFriendsRequest:[],
+                })
+               
+            })
+            .then(()=>{
                 Alert.alert(
                     "Registration Successful",
                     "You have registered successfully!",
@@ -87,14 +101,14 @@ const RegisterScreen = ({ navigation }: SignUpProps) => {
                         placeholder='Confirm Your Password'
                     />
                 </View>
-                <Pressable style={styles.btn} onPress={handleRegister}>
+                <TouchableOpacity style={styles.btn} onPress={handleRegister}>
                     <Text style={styles.btn_text}>Sign Up</Text>
-                </Pressable>
-                <Pressable style={{ marginTop: 20 }} onPress={() => navigation.navigate("Login")}>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ marginTop: 20 }} onPress={() => navigation.navigate("Login")}>
                     <Text style={{ textAlign: 'center', fontSize: 17 }}>
                         Already have an account? <Text style={{ color: '#4A55A2' }}>Sign In</Text>
                     </Text>
-                </Pressable>
+                </TouchableOpacity>
             </ScrollView>
         </View>
     );

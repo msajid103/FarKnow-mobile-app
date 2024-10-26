@@ -10,6 +10,7 @@ import FriendsScreen from './screens/FriendsScreen'
 import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
 import TestScreen from './screens/TestScreen'
+import CreatePostScreen from './screens/CreatePostScreen'
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -17,12 +18,12 @@ export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Test: undefined;
+  CreatePost: {userdata: object};
   Home: {userId: string};
   Chat: { userName: string; userProfilePic: string };
-  Friends: { users: [] }; 
+  Friends: {userdata: object};
  
 };
-
 const Stack = createSharedElementStackNavigator<RootStackParamList>();
 const App = () => {
   return (
@@ -103,6 +104,13 @@ const App = () => {
         component={TestScreen}
         options={{
           title: 'Test'
+        }}
+        />
+        <Stack.Screen
+        name= 'CreatePost'
+        component={CreatePostScreen}
+        options={{
+          title: 'CreatePost'
         }}
         />
 

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "964934872645",
-    "project_id": "far-know",
-    "storage_bucket": "far-know.appspot.com"
+    "project_number": "144312177790",
+    "project_id": "far-know-1b669",
+    "storage_bucket": "far-know-1b669.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:964934872645:android:501415826badd4a6d3bd2c",
+        "mobilesdk_app_id": "1:144312177790:android:942f9890d4caaba30ab42f",
         "android_client_info": {
           "package_name": "com.myapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC7gQ-qTS1OLHv4VtxNuyqvfIDcnfYvDBE"
+          "current_key": "AIzaSyBMKL9To7oG6o_aIa0Tz89EUgIogyROytc"
         }
       ],
       "services": {
