@@ -3,43 +3,6 @@ import { FlatList, SafeAreaView, StyleSheet, Image, ActivityIndicator } from 're
 import PostCard from '../components/Home/PostCard';
 import firestore from '@react-native-firebase/firestore';
 import Header from '../components/Home/Header';
-
-const posts = [
-  {
-    id: '1',
-    userName: 'Nisaar Ali',
-    userProfilePic: 'https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    text: 'Enjoying a beautiful day!',
-    imageUrl: 'https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    likes: 12,
-  },
-  {
-    id: '3',
-    userName: 'John Doe',
-    userProfilePic: 'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    text: 'Enjoying a beautiful day!',
-    imageUrl: 'https://plus.unsplash.com/premium_photo-1661420226112-311050ce30da?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    likes: 12,
-  },
-  {
-    id: '4',
-    userName: 'John Doe',
-    userProfilePic: 'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    text: 'Enjoying a beautiful day!',
-    imageUrl: 'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    likes: 12,
-  },
-  {
-    id: '2',
-    userName: 'Jane Smith',
-    userProfilePic: 'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    text: 'Just finished an amazing workout!',
-    imageUrl: '',
-    likes: 8,
-  },
-  // Add more posts here...
-];
-
 const HomeScreen = ({ route, navigation }) => {
   const {userId} = route.params;
   const [userdata, setUserdata] = useState(null);  // Start with null or empty object
@@ -90,9 +53,7 @@ const HomeScreen = ({ route, navigation }) => {
         <ActivityIndicator size="large" color="#4A55A2" />
       </SafeAreaView>
     );
-  }
-
-  
+  }  
   return (
     <SafeAreaView style={{ flex: 1 }}>      
       {userdata && (

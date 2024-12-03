@@ -1,6 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-
 export default function User({ userName }) {
   console.log('User:', userName)
   return (
@@ -18,7 +17,6 @@ export default function User({ userName }) {
     </Pressable>
   );
 }
-
 const styles = StyleSheet.create({
   userCard: {
     flexDirection: 'row',

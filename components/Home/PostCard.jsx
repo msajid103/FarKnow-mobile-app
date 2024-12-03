@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../App'
-
 // Sample PostCard Component for UI
 const PostCard = ({post, navigation}) => {
   const [likes, setLikes] = useState(post.likes);
-
   return (
     <View style={styles.card}>
       {/* User Information */}

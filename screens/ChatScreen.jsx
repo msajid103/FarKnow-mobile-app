@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
 // Sample data for chat messages
 const initialMessages = [
     { id: '1', text: 'Hello!', sender: 'other' },
     { id: '2', text: 'Hey! How are you?', sender: 'self' },
     { id: '3', text: 'I\'m good, what about you?', sender: 'other' },
 ];
-
 const ChatScreen = ({ route, navigation }) => {
     const { userName, userProfilePic } = route.params;
     const [messages, setMessages] = useState(initialMessages);
     const [newMessage, setNewMessage] = useState('');
-
     // Set the custom header with user's profile picture and name
     useEffect(() => {
         navigation.setOptions({

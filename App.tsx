@@ -11,7 +11,6 @@ import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
 import TestScreen from './screens/TestScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
-
 export type RootStackParamList = {
   Splash: undefined;
   SocialLogin:undefined;
