@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Pressable, ImageBackground } from 'react-native';
-import Background from '../components/Background';
 import Logo from '../components/Logo';
 import { SharedElement } from 'react-navigation-shared-element';
-import Animated from 'react-native-reanimated';
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
 
