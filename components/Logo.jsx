@@ -20,15 +20,13 @@ const Logo = () => {
 export default Logo
 
 const styles = StyleSheet.create({
-    container:{
-        // flex:1,       
-        // alignItems:'center',
+    container:{        
             alignItems: 'center'
 
     },
     logo: {
-        width: 300,  
-        height: 300,
+        width: 250,  
+        height: 250,
       },
       brandText: {
         fontSize: 40, // Adjust text size as needed

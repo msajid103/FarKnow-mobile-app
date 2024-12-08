@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+
+
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const CreatePostScreen = ({ route, navigation }) => {
-    const userdata = route.params
+    const userdata = route.params;
     const [content, setContent] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        // Retrieve the userId from Firebase Authentication
+        const user = auth().currentUser;
+        if (user) {
+            setUserId(user.uid);
+            console.log('User ID:', user.uid); // Debugging userId
+        } else {
+            Alert.alert('Error', 'User not logged in!');
+            navigation.goBack(); // Navigate back if no user is logged in
+        }
+    }, []);
 
     const handlePostSubmit = async () => {
+        if (!userId) {
+            Alert.alert('Error', 'User ID not found. Please log in again.');
+            return;
+        }
+
         if (content.trim() === '' && imageUrl.trim() === '') {
-            Alert.alert('Error', 'Please Fill all field.');
+            Alert.alert('Error', 'Please fill all fields.');
             return;
         }
 
@@ -23,20 +44,24 @@ const CreatePostScreen = ({ route, navigation }) => {
                 likes: [],
                 commints: [],
                 share: [],
-                createdAt: firestore.FieldValue.serverTimestamp()
+                createdAt: firestore.FieldValue.serverTimestamp(),
             };
+
             const postRef = await firestore().collection('Posts').add(post);
+
             await firestore()
                 .collection('Users')
                 .doc(userId)
                 .update({
-                    posts: firestore.FieldValue.arrayUnion(postRef.id) // Adds the postId to the array
+                    posts: firestore.FieldValue.arrayUnion(postRef.id), // Adds the postId to the array
                 });
+
             Alert.alert('Success', 'Post created successfully!');
             setContent('');
             setImageUrl('');
             navigation.goBack();
         } catch (error) {
+            console.error('Error creating post:', error); // Log the error for debugging
             Alert.alert('Error', 'Failed to create post.');
         }
     };

@@ -11,6 +11,7 @@ import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
 import TestScreen from './screens/TestScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
+import ChatBotScreen from './screens/ChatBotScreen'
 export type RootStackParamList = {
   Splash: undefined;
   SocialLogin:undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Home: {userId: string};
   Chat: { userName: string; userProfilePic: string };
   Friends: {userdata: object};
+  ChatBot: undefined;
  
 };
 const Stack = createSharedElementStackNavigator<RootStackParamList>();
@@ -111,6 +113,13 @@ const App = () => {
         options={{
           title: 'CreatePost'
         }}
+        />
+         <Stack.Screen
+          name="ChatBot"
+          component={ChatBotScreen} // Add ChatBot screen
+          options={{
+            title: 'Crop Assistant Bot',
+          }}
         />
 
       </Stack.Navigator>

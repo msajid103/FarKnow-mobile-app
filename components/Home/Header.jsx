@@ -27,7 +27,10 @@ const Header = ({ userData, profileImage }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('CreatePost',userData)}>
           <Icon name="edit" size={35} color="gray" style={styles.icon} />
-        </TouchableOpacity>       
+        </TouchableOpacity> 
+        <TouchableOpacity onPress={() => navigation.navigate('ChatBot')}>
+          <Icon name="chat" size={35} color="gray" style={styles.icon} />
+        </TouchableOpacity>      
       </View>
     </View>
   );
