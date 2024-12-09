@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, Pressable, Alert, ImageBackground } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, TextInput, Pressable, Alert, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import auth from '@react-native-firebase/auth';
@@ -36,47 +36,55 @@ const LoginScreen = ({ navigation }: LoginProps) => {
             style={styles.background}
             resizeMode="cover" // or "stretch" or "contain" depending on your needs
         >
-            <View  style={styles.mainContainer}>
+            <View style={styles.mainContainer}>
 
-                <KeyboardAvoidingView>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', padding: 10 }}>
                     <View style={styles.container}>
-                    
-                            <Text style={styles.TextHeading}>Sign In</Text>
-                    
+                        <Text style={styles.TextHeading}>Sign In</Text>
                     </View>
-                    <View style={{ marginTop: 50 }}>
-                        <Text style={styles.InputText}>Email</Text>
-                        <TextInput
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
-                            style={styles.InputPlaceholder}
-                            placeholder='Enter Your Email' />
-                    </View>
-                    <View style={{ marginTop: 30 }}>
-                        <Text style={styles.InputText}>Password</Text>
-                        <TextInput
-                            value={password}
-                            secureTextEntry={true}
-                            onChangeText={(text) => setPassword(text)}
-                            style={styles.InputPlaceholder}
-                            placeholder='Enter Password' />
-                    </View>
-                    <Pressable style={styles.btn}
+
+                    <TextInput
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                        style={[styles.InputPlaceholder, { marginTop: 40 }]}
+                        placeholder='Enter Your Email' />
+
+
+                    <TextInput
+                        value={password}
+                        secureTextEntry={true}
+                        onChangeText={(text) => setPassword(text)}
+                        style={styles.InputPlaceholder}
+                        placeholder='Enter Password' />
+
+                    <TouchableOpacity style={styles.btn}
                         onPress={() => handleLogin()}>
                         <Text style={styles.btn_text}>
                             Login
                         </Text>
-                    </Pressable>
-                    <Pressable style={{ marginTop: 20 }}
-                        onPress={() => {
-                            navigation.navigate("SignUp")
-                        }}>
-                        <Text style={{ textAlign: 'center', fontSize: 17 }}>
-                            Don't have an account? <Text style={{ color: 'black' }}>Sign Up</Text>
-                        </Text>
-                    </Pressable>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flexDirection:'row',marginTop: 25,}}>
+                        <Text style={{
+                            fontFamily: 'Robot', color: 'black', borderBottomWidth: 1, borderBottomColor: 'gray',
+                            
+                            fontSize: 17,
+                        }}>Forgot password?</Text>
+                    </TouchableOpacity>
 
-                </KeyboardAvoidingView>
+                    <View style={{ flexDirection: 'row', marginTop: 15, }}>
+                        <Text style={{ fontSize: 17 }} >
+                            Don't have an account?
+                        </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                            <Text style={{
+                                color: 'black', borderBottomWidth: 1, borderBottomColor: 'gray',
+                                paddingBottom: 2,
+                                fontSize: 17,
+                            }}> Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </ScrollView>
             </View>
         </ImageBackground>
     )
@@ -89,27 +97,27 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-evenly'
-       
+
     },
-    mainContainer:{
-        marginTop:90,
-        padding:20,
+    mainContainer: {
+        marginTop: 90,
+        padding: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',        
+        justifyContent: 'center',
         backgroundColor: 'white',
-        borderRadius:20,
-        
-      
+        borderRadius: 20,
+
+
     },
-    container: {      
+    container: {
         justifyContent: 'center',
         alignItems: 'center'
     },
     TextHeading: {
-        color: '#4A55A2',
+        color: 'black',
         fontSize: 20,
-        fontWeight: '600',
+        fontWeight: 'bold',
 
     },
     Text: {
@@ -127,12 +135,13 @@ const styles = StyleSheet.create({
     InputPlaceholder: {
         color: 'black',
         borderBottomColor: 'gray',
-        borderBottomWidth: 1,       
+        borderBottomWidth: 1,
+        marginVertical: 10,
         width: 300
 
     },
     btn: {
-        backgroundColor: '#4A55A2',
+        backgroundColor: 'orange',
         width: 200,
         padding: 15,
         marginTop: 50,

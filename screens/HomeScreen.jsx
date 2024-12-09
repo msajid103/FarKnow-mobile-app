@@ -50,7 +50,7 @@ const HomeScreen = ({ route, navigation }) => {
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#4A55A2" />
+        <ActivityIndicator size="large" color="orange" />
       </SafeAreaView>
     );
   }  

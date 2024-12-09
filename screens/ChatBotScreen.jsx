@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
+import {OPENAI_API_KEY} from '@env';
+
 
 export default function ChatBotScreen() {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const openaiApiKey = "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";
 
   const sendMessage = async () => {
     if (inputText.trim() === '') return;
@@ -21,7 +21,7 @@ export default function ChatBotScreen() {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${openaiApiKey}`,
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
