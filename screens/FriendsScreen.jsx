@@ -1,11 +1,15 @@
 import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
-import User from '../components/User'; // Your User component
+import User from '../components/User'; 
+import Header from '../components/Home/Header';
+
 const FriendsScreen = ({ route }) => {
-  const userdata = route.params; // Get the passed 'users' from route params
-  console.log('Friends:', userdata.friends)
+  const userdata = route.params; 
   return (
     <SafeAreaView>
+         {userdata && (
+        <Header userData={userdata} />
+      )}
       <FlatList
         data={userdata.friends}
         keyExtractor={(item) => item.id}

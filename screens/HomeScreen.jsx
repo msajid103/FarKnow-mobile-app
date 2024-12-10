@@ -4,9 +4,9 @@ import PostCard from '../components/Home/PostCard';
 import firestore from '@react-native-firebase/firestore';
 import Header from '../components/Home/Header';
 const HomeScreen = ({ route, navigation }) => {
-  const {userId} = route.params;
-  const [userdata, setUserdata] = useState(null);  // Start with null or empty object
-  const [postsData, setPostsData] = useState(null);  // Start with null or empty object
+  const { userId } = route.params;
+  const [userdata, setUserdata] = useState(null);
+  const [postsData, setPostsData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,7 +16,7 @@ const HomeScreen = ({ route, navigation }) => {
           .doc(userId)
           .get();
         if (userDoc.exists) {
-          setUserdata({userId,...userDoc.data()}); // Store data in useState
+          setUserdata({ userId, ...userDoc.data() }); // Store data in useState
 
         } else {
           console.log('No such User');
@@ -45,17 +45,15 @@ const HomeScreen = ({ route, navigation }) => {
     fetchUserData();
     fetchPosts();
   }, [userId]);
-
-  // Show loading indicator while fetching data
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="orange" />
       </SafeAreaView>
     );
-  }  
+  }
   return (
-    <SafeAreaView style={{ flex: 1 }}>      
+    <SafeAreaView style={{ flex: 1 }}>
       {userdata && (
         <Header userData={userdata} />
       )}
