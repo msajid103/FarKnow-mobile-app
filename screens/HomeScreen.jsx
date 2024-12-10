@@ -1,12 +1,13 @@
 import React, { useEffect, useId, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import PostCard from '../components/Home/PostCard';
+import { FlatList, SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, View, Text } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import Header from '../components/Home/Header';
+import Header from '../components/Header';
+import CardegoryList from '../components/Home/CardegoryList';
+import Posts from '../components/Home/Posts';
+
 const HomeScreen = ({ route, navigation }) => {
   const { userId } = route.params;
   const [userdata, setUserdata] = useState(null);
-  const [postsData, setPostsData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchUserData = async () => {
@@ -27,23 +28,9 @@ const HomeScreen = ({ route, navigation }) => {
         setLoading(false); // Stop loading once data is fetched
       }
     };
-    const fetchPosts = async () => {
-      try {
-        const postsSnapshot = await firestore().collection('Posts').get();
-        const postsData = postsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setPostsData(postsData);
-      } catch (error) {
-        console.log("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchUserData();
-    fetchPosts();
+
   }, [userId]);
   if (loading) {
     return (
@@ -53,28 +40,60 @@ const HomeScreen = ({ route, navigation }) => {
     );
   }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {userdata && (
-        <Header userData={userdata} />
-      )}
-      <FlatList
-        data={postsData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PostCard post={item} navigation={navigation} />}
-      />
-    </SafeAreaView>
+    <ScrollView showsScrollIndicator={false}>
+      <Header userData={userdata} />
+      <CardegoryList />
+      <Posts/>
+    </ScrollView>
+
+
   );
+
+  // return (
+
+  //   <SafeAreaView style={{ flex: 1 }}>
+  //     {/* Main FlatList with Header and Category */}
+  //     <FlatList
+  //       data={postsData}
+  //       keyExtractor={(item) => item.id}
+  //       ListHeaderComponent={() => (
+  //         <>
+  //           {userdata && (
+  //             <Header userData={userdata} />
+  //           )}
+  //           {/* Categories - Horizontal FlatList */}
+  //           <View style={styles.categoriesSection}>
+  //             <Text style={styles.sectionTitle}>Categories</Text>
+  //             <FlatList
+  //             data={categories}
+  //             keyExtractor={(item, index) => index.toString()}
+  //             renderItem={({ item }) => <CategoryCard data={item} navigation={navigation} />}
+  //             horizontal = {true}
+
+  //           />
+  //           </View>
+  //         </>
+  //       )}
+  //       renderItem={({ item }) => <PostCard post={item} navigation={navigation} />}
+  //           showsVerticalScrollIndicator={false}
+  //     />
+  //   </SafeAreaView>
+  // );
 };
+
+
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  headerIcons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: 15,
+  categoriesSection: {
+    marginVertical: 10,
   },
-  iconSpacing: {
-    marginLeft: 20,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 15,
+    marginBottom: 10,
   },
+
 });

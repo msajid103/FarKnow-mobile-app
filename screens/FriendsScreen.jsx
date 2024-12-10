@@ -1,8 +1,7 @@
 import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
-import User from '../components/User'; 
-import Header from '../components/Home/Header';
-
+import User from '../components/FriendsList/User'; 
+import Header from '../components/Header';
 const FriendsScreen = ({ route }) => {
   const userdata = route.params; 
   return (

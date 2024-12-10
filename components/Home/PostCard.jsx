@@ -1,31 +1,22 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-// Sample PostCard Component for UI
-const PostCard = ({post, navigation}) => {
-  const [likes, setLikes] = useState(post.likes);
+
+const PostCard = ({post}) => {
+  const [likes, setLikes] = useState(post.likes); 
   return (
-    <View style={styles.card}>
-      {/* User Information */}
-      <TouchableOpacity onPress={() =>{
-        navigation.navigate("Chat", {
-          userName: post.userName,
-          userProfilePic: post.userProfilePic,
-        })
-      } } style={styles.actionButton}>
+    <View style={styles.card}>     
+      <TouchableOpacity style={styles.actionButton}>
       <View style={styles.userInfo}>
         <Image source={{ uri: post.createrImageUrl }} style={styles.profilePic} />
         <Text style={styles.userName}>{post.createrName}</Text>
       </View>
       </TouchableOpacity>
 
-
-      {/* Post Content: Text and/or Image */}
       <View style={styles.postContent}>
       {post.content && <Text style={styles.postText}>{post.content}</Text>}
         {post.imageUrl && <Image source={{ uri: post.imageUrl }} style={styles.postImage} />}
       </View>
 
-      {/* Action Buttons */}
       <View style={styles.actionRow}>
         <TouchableOpacity onPress={() => setLikes(likes + 1)} style={styles.actionButton}>
           <Text style={styles.actionText}>Like {post.likes.length}</Text>

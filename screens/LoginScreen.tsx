@@ -6,8 +6,8 @@ import { RootStackParamList } from '../App'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 const LoginScreen = ({ navigation }: LoginProps) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("msajidnaizi@gmail.com");
+    const [password, setPassword] = useState("123456");
 
     function handleLogin() {
         if (email.trim() === "" || password.trim() === "") {

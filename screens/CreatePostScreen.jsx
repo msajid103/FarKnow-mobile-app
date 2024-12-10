@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import Header from '../components/Header';
 
 const CreatePostScreen = ({ route, navigation }) => {
     const userdata = route.params;
@@ -67,6 +68,8 @@ const CreatePostScreen = ({ route, navigation }) => {
     };
 
     return (
+        <>
+        <Header userData={userdata} />
         <View style={styles.container}>
             <TextInput
                 style={styles.textInput}
@@ -84,6 +87,7 @@ const CreatePostScreen = ({ route, navigation }) => {
             />
             <Button title="Post" onPress={handlePostSubmit} color="#4A55A2" />
         </View>
+        </>
     );
 };
 
