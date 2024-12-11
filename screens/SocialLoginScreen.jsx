@@ -28,7 +28,7 @@ const SocialLoginScreen = ({ navigation }) => {
         <View style={styles.line} />
       </View>
       <TouchableOpacity style={styles.socilaContainer}>       
-          <Icon name="facebook" size={25} color='black'/>
+          <Icon name="Google" size={25} color='black'/>
           <Text style ={{color:'black'}}>Continue with Google</Text>     
       </TouchableOpacity>
       <TouchableOpacity style={styles.socilaContainer}>       
@@ -39,9 +39,9 @@ const SocialLoginScreen = ({ navigation }) => {
           <Icon name="apple" size={25} color='black'/>
           <Text style ={{color:'black'}}>Continue with Apple</Text>     
       </TouchableOpacity>
-      <TouchableOpacity style={styles.signUp}>
+      <TouchableOpacity style={styles.signUp} onPress={()=> navigation.navigate('Test')}>
         <Text style={{color: 'black'}}>Don't have account?</Text>
-       <Text style={{fontWeight: 'bold',color: 'black'}}> SignUp</Text>        
+       <Text style={{fontWeight: 'bold',color: 'black'}}> TestScreen</Text>        
       </TouchableOpacity>
     </ImageBackground>
   );

@@ -1,6 +1,7 @@
-import React, { useEffect, useId, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import Icon from 'react-native-vector-icons/AntDesign';
 import Header from '../components/Header';
 import CardegoryList from '../components/Home/CardegoryList';
 import Posts from '../components/Home/Posts';
@@ -9,6 +10,7 @@ const HomeScreen = ({ route, navigation }) => {
   const { userId } = route.params;
   const [userdata, setUserdata] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -18,82 +20,61 @@ const HomeScreen = ({ route, navigation }) => {
           .get();
         if (userDoc.exists) {
           setUserdata({ userId, ...userDoc.data() }); // Store data in useState
-
         } else {
           console.log('No such User');
         }
       } catch (error) {
-        console.log("Error fetching user data:", error);
+        console.log('Error fetching user data:', error);
       } finally {
         setLoading(false); // Stop loading once data is fetched
       }
     };
 
     fetchUserData();
-
   }, [userId]);
+
   if (loading) {
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="orange" />
       </SafeAreaView>
     );
   }
+
   return (
-    <ScrollView showsScrollIndicator={false}>
-      <Header userData={userdata} />
-      <CardegoryList />
-      <Posts/>
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Header userData={userdata} />
+        <CardegoryList />
+        <Posts />
+      </ScrollView>
 
-
+      {/* Floating Button */}
+      <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('ChatBot')}>
+        <Icon name="aliwangwang" size={30} color="black" />     
+      </TouchableOpacity>
+    </SafeAreaView>
   );
-
-  // return (
-
-  //   <SafeAreaView style={{ flex: 1 }}>
-  //     {/* Main FlatList with Header and Category */}
-  //     <FlatList
-  //       data={postsData}
-  //       keyExtractor={(item) => item.id}
-  //       ListHeaderComponent={() => (
-  //         <>
-  //           {userdata && (
-  //             <Header userData={userdata} />
-  //           )}
-  //           {/* Categories - Horizontal FlatList */}
-  //           <View style={styles.categoriesSection}>
-  //             <Text style={styles.sectionTitle}>Categories</Text>
-  //             <FlatList
-  //             data={categories}
-  //             keyExtractor={(item, index) => index.toString()}
-  //             renderItem={({ item }) => <CategoryCard data={item} navigation={navigation} />}
-  //             horizontal = {true}
-
-  //           />
-  //           </View>
-  //         </>
-  //       )}
-  //       renderItem={({ item }) => <PostCard post={item} navigation={navigation} />}
-  //           showsVerticalScrollIndicator={false}
-  //     />
-  //   </SafeAreaView>
-  // );
 };
 
-
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatingButton: {
+    position: 'absolute', // Position fixed on the screen
+    bottom: 20, // Distance from the bottom
+    right: 20, // Distance from the right
+    backgroundColor: 'rgba(255, 156, 1, 0.7)', // Background color
+    width: 60,
+    height: 60,
+    borderRadius: 30, // Make it circular
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({
-  categoriesSection: {
-    marginVertical: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 15,
-    marginBottom: 10,
-  },
-
-});

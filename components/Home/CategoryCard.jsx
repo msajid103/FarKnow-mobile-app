@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image,StyleSheet, TouchableOpacity } from 'react-native';
 
 const CategoryCard = ({ data }) => {
-    console.log('Card---->',data)
     return (
       <View style={styles.container}>          
         <TouchableOpacity style={styles.card}>

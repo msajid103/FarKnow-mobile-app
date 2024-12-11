@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
-import {OPENAI_API_KEY} from '@env';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import Icons from 'react-native-vector-icons/AntDesign'
+import {GROQ_API_KEY} from '@env';
 
 
 export default function ChatBotScreen() {
@@ -17,15 +18,15 @@ export default function ChatBotScreen() {
     setInputText('');
     setIsLoading(true);
 
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    try {    
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          Authorization: `Bearer ${GROQ_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4', // Ensure you are using GPT-4
+          model: "llama3-8b-8192",
           messages: updatedMessages,
         }),
       });
@@ -58,13 +59,16 @@ export default function ChatBotScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={{ flexDirection:'row',backgroundColor:'green',justifyContent:'center', alignItems: 'center' ,height:70}}>        
+        <Text style={{color:'black', fontSize:20, fontWeight:'bold'}}>FarKnow AI</Text>
+      </View>
       <FlatList
         data={messages}
         renderItem={renderMessageItem}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.chatContainer}
       />
-      {isLoading && <Text style={styles.loadingText}>Thinking...</Text>}
+      {isLoading && <ActivityIndicator size="large" color="orange" />}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     marginLeft: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: 'orange',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
