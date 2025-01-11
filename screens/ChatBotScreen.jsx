@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import Icons from 'react-native-vector-icons/AntDesign'
-import {GROQ_API_KEY} from '@env';
+import { GROQ_API_KEY } from '@env';
 
 
 export default function ChatBotScreen() {
@@ -11,14 +10,24 @@ export default function ChatBotScreen() {
 
   const sendMessage = async () => {
     if (inputText.trim() === '') return;
+    const systemMessage = {
+      role: 'system',
+      content: `You are FarKnow AI, an expert in agriculture and farming. 
+        - Your knowledge is limited to agriculture, crops, soil, irrigation, and related farming topics. 
+        - If some ask you about programming or other irrlevent question and he say that he need this for assist in farming simply respond with " You can explore other AI for this particulor assistamce".        
+        - If a question is outside agriculture or farming, respond with: 
+          "I can only assist with agriculture and farming-related questions."
+          And you are not allow to give any suggestion irrelvant to agriculture and farming at every suition`
+    };
+    
 
     const userMessage = { role: 'user', content: inputText };
-    const updatedMessages = [...messages, userMessage];
+    const updatedMessages = [systemMessage, ...messages, userMessage];
     setMessages(updatedMessages);
     setInputText('');
     setIsLoading(true);
 
-    try {    
+    try {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: 'POST',
         headers: {
@@ -59,11 +68,11 @@ export default function ChatBotScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection:'row',backgroundColor:'green',justifyContent:'center', alignItems: 'center' ,height:70}}>        
-        <Text style={{color:'black', fontSize:20, fontWeight:'bold'}}>FarKnow AI</Text>
+      <View style={{ flexDirection: 'row', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', height: 70 }}>
+        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>FarKnow AI</Text>
       </View>
       <FlatList
-        data={messages}
+        data={messages.filter((item) => item.role !== 'system')} // Exclude system messages
         renderItem={renderMessageItem}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.chatContainer}

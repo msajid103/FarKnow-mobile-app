@@ -5,13 +5,44 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Header from '../components/Header';
 import CardegoryList from '../components/Home/CardegoryList';
 import Posts from '../components/Home/Posts';
+import PostCard from '../components/Home/PostCard';
 
 const HomeScreen = ({ route, navigation }) => {
   const { userId } = route.params;
   const [userdata, setUserdata] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [postsData, setPostsData] = useState(null);
+
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //         try {
+    //             const postsSnapshot = await firestore().collection('Posts').get();
+    //             const postsData = postsSnapshot.docs.map(doc => ({
+    //                 id: doc.id,
+    //                 ...doc.data()
+    //             }));
+    //             setPostsData(postsData);
+    //         } catch (error) {
+    //             console.log("Error fetching posts:", error);
+    //         }
+    //     };
+    //     fetchPosts()
+    // }, [postsData]);
 
   useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+          const postsSnapshot = await firestore().collection('Posts').get();
+          const postsData = postsSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+          }));
+          setPostsData(postsData);
+      } catch (error) {
+          console.log("Error fetching posts:", error);
+      }
+  };
+  
     const fetchUserData = async () => {
       try {
         const userDoc = await firestore()
@@ -29,6 +60,7 @@ const HomeScreen = ({ route, navigation }) => {
         setLoading(false); // Stop loading once data is fetched
       }
     };
+  fetchPosts()
 
     fetchUserData();
   }, [userId]);
@@ -54,6 +86,15 @@ const HomeScreen = ({ route, navigation }) => {
         <Icon name="aliwangwang" size={30} color="black" />     
       </TouchableOpacity>
     </SafeAreaView>
+    // <FlatList
+    //   data={postsData}
+    //   keyExtractor={(item) => item.id}
+    //   renderItem={({ item }) => <PostCard post={item} />}
+    //   showsHorizontalScrollIndicator={false}
+    //   ListHeaderComponent={<Header userData={userdata} />}
+    //   ListFooterComponent={CardegoryList}
+    //   showsVerticalScrollIndicator={false}
+    // />
   );
 };
 

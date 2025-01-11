@@ -10,6 +10,7 @@ import FriendsScreen from './screens/FriendsScreen'
 import SplashScreen from './screens/SplashScreen'
 import SocialLoginScreen from './screens/SocialLoginScreen'
 import TestScreen from './screens/TestScreen'
+import ChatDataScreen from './screens/ChatDataScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
 import ChatBotScreen from './screens/ChatBotScreen'
 export type RootStackParamList = {
@@ -18,6 +19,7 @@ export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
   Test: undefined;
+  ChatData: {userdata: object};
   CreatePost: {userdata: object};
   Home: {userId: string};
   Chat: { userName: string; userProfilePic: string };
@@ -105,6 +107,13 @@ const App = () => {
         component={TestScreen}
         options={{
           title: 'Test'
+        }}
+        />
+        <Stack.Screen
+        name= 'ChatData'
+        component={ChatDataScreen}
+        options={{
+          title: 'ChatData'
         }}
         />
         <Stack.Screen

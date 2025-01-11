@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Pressable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/AntDesign'
 import Logo from '../components/Logo';
 import { SharedElement } from 'react-navigation-shared-element';
 
@@ -28,7 +29,7 @@ const SocialLoginScreen = ({ navigation }) => {
         <View style={styles.line} />
       </View>
       <TouchableOpacity style={styles.socilaContainer}>       
-          <Icon name="Google" size={25} color='black'/>
+          <Icons name="google" size={25} color='black'/>
           <Text style ={{color:'black'}}>Continue with Google</Text>     
       </TouchableOpacity>
       <TouchableOpacity style={styles.socilaContainer}>       
@@ -80,13 +81,13 @@ const styles = StyleSheet.create({
   socilaContainer: {
     flexDirection: 'row',
     alignItems: 'center',    
-    backgroundColor: 'orange',
     paddingVertical: 13,
     paddingHorizontal: 50,
     borderRadius: 35, 
     borderBlockColor: 'black',
     borderWidth: 1,
     backgroundColor: '#F0E5E5',
+    width: 290,
     gap: 20  
   },
   signUp:{

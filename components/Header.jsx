@@ -34,8 +34,8 @@ const Header = ({ userData }) => {
         <TouchableOpacity onPress={() => navigation.navigate('CreatePost', userData)}>
           <Icon name="edit" size={35} color={getIconColor('CreatePost')} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ChatBot')}>
-          <Icon name="chat" size={35} color={getIconColor('ChatBot')} style={styles.icon} />
+        <TouchableOpacity onPress={() => navigation.navigate('ChatData', userData)}>
+          <Icon name="chat" size={35} color={getIconColor('ChatData')} style={styles.icon} />
         </TouchableOpacity>
       </View>
     </View>
