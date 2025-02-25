@@ -1,7 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply plugin: 'com.google.gms.google-services'
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 react {
@@ -27,6 +26,14 @@ android {
         versionName "1.0"
     }
     signingConfigs {
+         release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -39,12 +46,16 @@ android {
             signingConfig signingConfigs.debug
         }
           release {
+        signingConfig signingConfigs.release
         // Enables code shrinking, obfuscation, and resource shrinking
-        minifyEnabled true
-        shrinkResources true // Correct syntax for resource shrinking
+        // minifyEnabled true
+        // shrinkResources true // Correct syntax for resource shrinking
 
-        // Uses the default ProGuard rules for Android
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        // // Uses the default ProGuard rules for Android
+        // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        minifyEnabled enableProguardInReleaseBuilds
+        proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
     }
     }
 }
@@ -52,6 +63,8 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -61,3 +74,4 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'

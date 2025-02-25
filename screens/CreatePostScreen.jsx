@@ -85,7 +85,7 @@ const CreatePostScreen = ({ route, navigation }) => {
                 value={imageUrl}
                 onChangeText={setImageUrl}
             />
-            <Button title="Post" onPress={handlePostSubmit} color="#4A55A2" />
+            <Button title="Post" onPress={handlePostSubmit} color="orange" />
         </View>
         </>
     );

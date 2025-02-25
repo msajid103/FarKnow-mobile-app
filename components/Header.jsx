@@ -13,7 +13,7 @@ const Header = ({ userData }) => {
       <View style={styles.profileSection}>
         <View style={styles.profileContent}>
           <Image source={{ uri: userData.imageUrl }} style={styles.profileImage} />
-          <Text style={styles.welcomeText}>Welcome, {userData.name}!</Text>
+          <Text style={styles.welcomeText}>{userData.name}!</Text>
         </View>
         <View style={{flexDirection:'row'}}>
           <TouchableOpacity>

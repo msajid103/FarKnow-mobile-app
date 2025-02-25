@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "144312177790",
     "project_id": "far-know-1b669",
-    "storage_bucket": "far-know-1b669.appspot.com"
+    "storage_bucket": "far-know-1b669.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,20 @@
           "package_name": "com.myapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "144312177790-1pgvpbppa81i209pdqs673mkhc10m47b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myapp",
+            "certificate_hash": "0584afc02fa02c5f7872bb4267b95a9db992171e"
+          }
+        },
+        {
+          "client_id": "144312177790-4bfne9k2jhhl4p4rspdjentkd06ue777.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBMKL9To7oG6o_aIa0Tz89EUgIogyROytc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144312177790-4bfne9k2jhhl4p4rspdjentkd06ue777.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

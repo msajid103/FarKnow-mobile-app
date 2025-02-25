@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, ScrollView,ActivityIndicator , TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Header from '../components/Header';
 
-const ChatDataScreen = ({ route }) => {
+const ChatDataScreen = ({ route, navigation }) => {
   const [friendsData, setFriendsData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const userdata = route.params;
 
   useEffect(() => {
@@ -13,46 +14,70 @@ const ChatDataScreen = ({ route }) => {
         const userDoc = await firestore().collection('Users').doc(userdata.userId).get();
         const userFriends = userDoc.data()?.friends || [];
 
-        // Fetch friends details based on their IDs
-        const friendsPromises = userFriends.map((friendId) =>
-          firestore().collection('Users').doc(friendId).get()
-        );
-        console.log('friendsPromises-------',friendsPromises)
+        // Fetch friend details and chat info
+        const friendsPromises = userFriends.map(async (friendId) => {
+          const friendDoc = await firestore().collection('Users').doc(friendId).get();
+          const chatQuery = await firestore()
+            .collection('Chats')
+            .where('participants', 'array-contains', userdata.userId)
+            .get();
 
-        const friendsSnapshots = await Promise.all(friendsPromises);
-        console.log('friendsSnapshots-------',friendsSnapshots)
+          const chatDoc = chatQuery.docs.find((doc) =>
+            doc.data().participants.includes(friendId)
+          );
 
+          return {
+            id: friendId,
+            name: friendDoc.data()?.name,
+            avatar: friendDoc.data()?.imageUrl,
+            lastMessage: chatDoc?.data()?.lastMessage || 'No message available.',
+            chatId: chatDoc?.id || null,
+            date: chatDoc?.data()?.createdAt?.toDate().toLocaleString() || 'N/A',
+          };
+        });
 
-        const fetchedFriends = friendsSnapshots.map((doc) => (
-          console.log('doc-------',doc.data()),        
-          
-          {
-          id: doc.id,
-          name: doc.data().name,
-          avatar: doc.data().imageUrl ,
-          lastMessage: doc.data().lastMessage || 'No message available.',
-          date: doc.data().date || 'N/A',
-        }));
-
+        const fetchedFriends = await Promise.all(friendsPromises);
         setFriendsData(fetchedFriends);
       } catch (err) {
         console.log('Error fetching friends:', err);
+      } finally {
+        setLoading(false); 
       }
     };
 
     fetchFriends();
   }, [userdata.userId]);
-  console.log('frinesdss-------',friendsData)
+
   const renderChatItem = ({ item }) => (
-    <View style={styles.chatItem}>
+    <TouchableOpacity
+      style={styles.chatItem}
+      onPress={() =>
+        navigation.navigate('Chat', {
+          chatId: item.chatId,
+          userName: item.name,
+          userProfilePic: item.avatar,
+          friendId: item.id,
+          userId:userdata.userId,
+        })
+      }
+    >
       <Image source={{ uri: item.avatar }} style={styles.avatar} />
       <View style={styles.chatContent}>
         <Text style={styles.chatName}>{item.name}</Text>
         <Text style={styles.chatMessage}>{item.lastMessage}</Text>
       </View>
       <Text style={styles.chatDate}>{item.date}</Text>
-    </View>
+    </TouchableOpacity>
   );
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Loading chats...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -68,6 +93,11 @@ const ChatDataScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

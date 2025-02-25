@@ -1,44 +1,96 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
-// Sample data for chat messages
-const initialMessages = [
-    { id: '1', text: 'Hello!', sender: 'other' },
-    { id: '2', text: 'Hey! How are you?', sender: 'self' },
-    { id: '3', text: 'I\'m good, what about you?', sender: 'other' },
-];
-const ChatScreen = ({ route, navigation }) => {
-    const { userName, userProfilePic } = route.params;
-    const [messages, setMessages] = useState(initialMessages);
-    const [newMessage, setNewMessage] = useState('');
-    // Set the custom header with user's profile picture and name
-    useEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => (
-                <View style={styles.headerContainer}>
-                    <Image source={{ uri: userProfilePic }} style={styles.headerProfilePic} />
-                    <Text style={styles.headerUserName}>{userName}</Text>
-                </View>
-            ),
-            headerTitleAlign: 'start', 
-        });
-    }, [navigation, userName, userProfilePic]);
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    FlatList,
+    StyleSheet,
+    Image,
+    Platform,
+    KeyboardAvoidingView,
+} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
-    // Function to handle sending a new message
-    const handleSendMessage = () => {
-        if (newMessage.trim() === '') return;
-        const newMsg = { id: (messages.length + 1).toString(), text: newMessage, sender: 'self' };
-        setMessages([...messages, newMsg]);
+const ChatScreen = ({ route }) => {
+    const { chatId, userName, userProfilePic, userId } = route.params;
+    const navigation = useNavigation();
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('Chats')
+            .doc(chatId)
+            .collection('messages')
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) => {
+                const fetchedMessages = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setMessages(fetchedMessages);
+            });
+
+        return () => unsubscribe();
+    }, [chatId]);
+
+    // Send message handler
+    const handleSendMessage = async () => {
+        if (!newMessage.trim()) return;
+
+        const messageData = {
+            sender: userId,
+            content: newMessage,
+            timestamp: firestore.Timestamp.now(),
+        };
+
+        await firestore()
+            .collection('Chats')
+            .doc(chatId)
+            .collection('messages')
+            .add(messageData);
+
+        await firestore()
+            .collection('Chats')
+            .doc(chatId)
+            .update({
+                lastMessage: newMessage,
+                updatedAt: firestore.Timestamp.now(),
+            });
+
         setNewMessage('');
     };
 
+    // Render a single message
     const renderMessage = ({ item }) => {
-        const isSelf = item.sender === 'self';
+        const isSelf = item.sender === userId;
         return (
             <View style={[styles.messageContainer, isSelf ? styles.selfMessage : styles.otherMessage]}>
-                <Text style={styles.messageText}>{item.text}</Text>
+                <Text style={styles.messageText}>{item.content}</Text>
+                <Text style={styles.timestamp}>
+                    {item.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </Text>
             </View>
         );
     };
+
+    // Header with profile picture and name
+    // useEffect(() => {
+    //     navigation.setOptions({
+    //         headerTitle: () => (
+    //             <View style={styles.headerContainer}>
+    //                 <Image source={{ uri: userProfilePic }} style={styles.headerProfilePic} />
+    //                 <Text style={styles.headerUserName}>{userName}</Text>
+    //             </View>
+    //         ),
+    //         headerStyle: {
+    //             backgroundColor: '#128C7E', // WhatsApp-like color
+    //             height: 80,
+    //         },
+    //         headerTitleAlign: 'left',
+    //     });
+    // }, [navigation, userName, userProfilePic]);
 
     return (
         <KeyboardAvoidingView
@@ -46,31 +98,40 @@ const ChatScreen = ({ route, navigation }) => {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             keyboardVerticalOffset={90}
         >
-            {/* Chat Messages List */}
+            <View style={styles.header}>
+                {/* <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="#fff" />
+                </TouchableOpacity> */}
+                <Image source={{ uri: userProfilePic }} style={styles.headerProfilePic} />
+                <Text style={styles.headerUserName}>{userName}</Text>
+            </View>
             <FlatList
                 data={messages}
                 renderItem={renderMessage}
                 keyExtractor={(item) => item.id}
                 style={styles.chatList}
+                contentContainerStyle={{ paddingBottom: 20 }}
             />
-
-            {/* Input Box and Send Button */}
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     value={newMessage}
                     onChangeText={setNewMessage}
                     placeholder="Type a message"
+                    placeholderTextColor="#aaa"
                 />
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Text style={styles.sendButtonText}>Send</Text>
+                    {/* <Ionicons name="send" size={20} color="#fff" /> */}
+                    <Text style={{
+                        color: '#FFF',
+                        fontWeight: 'bold',
+                    }}>Send</Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
 };
 
-// Styles for the chat screen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -80,21 +141,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     messageContainer: {
+        maxWidth: '80%',
+        marginVertical: 5,
         padding: 10,
         borderRadius: 10,
-        marginVertical: 5,
-        maxWidth: '80%',
     },
     selfMessage: {
         alignSelf: 'flex-end',
-        backgroundColor: '#DCF8C6', // Light green for own messages
+        backgroundColor: '#DCF8C6',
     },
     otherMessage: {
         alignSelf: 'flex-start',
-        backgroundColor: '#ECECEC', // Light gray for received messages
+        backgroundColor: '#ECECEC',
     },
     messageText: {
         fontSize: 16,
+        color: '#000',
+    },
+    timestamp: {
+        fontSize: 10,
+        color: '#555',
+        textAlign: 'right',
+        marginTop: 5,
     },
     inputContainer: {
         flexDirection: 'row',
@@ -117,29 +185,31 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     sendButton: {
-        backgroundColor: '#007BFF',
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        borderRadius: 25,
+        marginLeft: 10,
+        backgroundColor: 'orange',
+        borderRadius: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
     },
-    sendButtonText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-    headerContainer: {
+
+    header: {
         flexDirection: 'row',
-        // justifyContent:'flex-end' ,
         alignItems: 'center',
+        backgroundColor: 'green',
+        padding: 10,
+        height: 80,
     },
     headerProfilePic: {
         width: 40,
         height: 40,
         borderRadius: 20,
-        marginRight: 10,
+        marginLeft: 10,
     },
     headerUserName: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 10,
     },
 });
 
