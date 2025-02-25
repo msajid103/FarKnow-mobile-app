@@ -1,68 +1,29 @@
 import { Text, StyleSheet, View, ScrollView, TextInput, TouchableOpacity, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
-import auth from '@react-native-firebase/auth';
-import firestore from "@react-native-firebase/firestore";
+import { loginUser } from '../firebase/authService';
+import { createUserDocument } from '../firebase/firestoreService';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    function handleLogin() {
-        if (email.trim() === "" || password.trim() === "") {
-            Alert.alert("Error", "Please enter email and password", [{ text: "OK" }]);
-            return;
+    const handleLogin = async () => {
+        try {
+            setLoading(true);
+            const user = await loginUser(email, password);
+            await createUserDocument(user.uid, user.email, user.displayName || "New User");
+            setLoading(false);
+            navigation.navigate("Home", { userId: user.uid });
+        } catch (e) {
+            setLoading(false);
+            if (e.code === "auth/network-request-failed") {
+                Alert.alert("No Internet", "Check Your Internet Connectivity");
+            } else {
+                Alert.alert("Invalid Credentials", "Wrong Email or Password");
+            }
         }
-
-        setLoading(true);
-        auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(async(userCredential) => {
-                const user = userCredential.user;
-                if (!user.emailVerified) {
-                    setLoading(false);
-                    Alert.alert("Invalid Credentials", "Wrong Email or Password", [{ text: "OK" }]);
-                    auth().signOut();
-                    return;
-                }
-
-                const userId = user.uid;
-                const userDocRef = firestore().collection("Users").doc(userId);
-
-                // Check if user document exists
-                const userDoc = await userDocRef.get();
-
-                if (!userDoc.exists) {
-                    // Create new user document
-                    await userDocRef.set({
-                        name: user.displayName ? user.displayName.trim() : "New User",
-                        email: user.email.trim(),
-                        imageUrl: "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png",
-                        friends: [],
-                        friendRequests: {
-                            sent: [],
-                            received: [],
-                        },
-                        chats: [],
-                        createdAt: firestore.FieldValue.serverTimestamp(),
-                        updatedAt: firestore.FieldValue.serverTimestamp(),
-                    });
-                }
-                setLoading(false);
-                navigation.navigate("Home", { userId });
-            })
-            .catch(e => {
-                setLoading(false);
-                if (e.code === "auth/invalid-credential") {
-                    Alert.alert("Invalid Credentials", "Wrong Email or Password");
-                } else if (e.code === "auth/network-request-failed") {
-                    Alert.alert("No Internet", "Check Your Internet Connectivity");
-                } else {
-                    Alert.alert("Login Failed", `Error: ${e.message}`);
-                }
-            });
-    }
-
+    };
 
     return (
         <ImageBackground

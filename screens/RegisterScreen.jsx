@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import { registerUser } from "../firebase/authService";
+import { createUserDocument } from "../firebase/firestoreService";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -20,70 +20,27 @@ const RegisterScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleRegister() {
-    if (name.trim() === "" || email.trim() === "" || password.trim() === "") {
-      Alert.alert("Error", "Please fill out all fields", [{ text: "OK" }]);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match.");
-      return;
-    }
-
-    setLoading(true);
-
+  const handleRegister = async () => {
     try {
-      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
-      const user = userCredential.user;
-
-      // Send email verification
-      await user.sendEmailVerification();
-
-      Alert.alert(
-        "Verify Your Email",
-        "A verification email has been sent to your email address. Please verify before logging in.",
-        [{ text: "OK" }]
-      );
-
-      // Wait for user to verify email
-      const checkVerification = setInterval(async () => {
-        await user.reload(); // Refresh user data
-        if (auth().currentUser.emailVerified) {
-          clearInterval(checkVerification); // Stop checking
-
-          // Save the user to Firestore only after verification
-          await firestore().collection("Users").doc(user.uid).set({
-            name: name.trim(),
-            email: email.trim(),
-            imageUrl:
-              "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png",
-            friends: [],
-            friendRequests: {
-              sent: [],
-              received: [],
-            },
-            chats: [],
-            createdAt: firestore.FieldValue.serverTimestamp(),
-            updatedAt: firestore.FieldValue.serverTimestamp(),
-          });
-
-          Alert.alert("Success", "Email verified! You can now log in.");
-          setLoading(false);
-          navigation.navigate("Login");
-        }
-      }, 3000); // Check every 3 seconds
+      setLoading(true);
+      const user = await registerUser(email, password, confirmPassword)
+      await createUserDocument(user.uid, user.email, name);
+      Alert.alert("Success", "Email verified! You can now log in.");
+      setLoading(false);
+      navigation.navigate("Login");
     } catch (e) {
       setLoading(false);
       if (e.code === "auth/email-already-in-use") {
-        Alert.alert("Already Exists", "This email is already in use.");
+        Alert.alert("Already Exists", "This email already in use.");
       } else if (e.code === "auth/invalid-email") {
         Alert.alert("Invalid Email", "Please enter a valid email.");
-      } else if(e.code === "auth/network-request-failed"){
-        Alert.alert("No Internet","Check Your Internet Connectivity");
+      } else if (e.code === "auth/network-request-failed") {
+        Alert.alert("No Internet", "Check Your Internet Connectivity");
+      } else if (e.code === "auth/weak-password") {
+        Alert.alert("Weak Password", "The password should be at least 6 characters long ");
       }
       else {
-        Alert.alert("Registration Failed", `Error: ${e.message}`);
+        Alert.alert("Error", e.message);
       }
     }
   }
