@@ -30,10 +30,8 @@ const MenuScreen = ({route, navigation }) => {
         </TouchableOpacity>
         <Text style={styles.menuTitle}>Menu</Text>
       </View>
-
-      {/* White Card Section */}
-      <View style={styles.card}>
-        {/* Profile Section */}
+      
+      <View style={styles.card}>     
         <View style={styles.profileContainer}>
           <Image
             source={{ uri: userData.imageUrl }}
