@@ -12,7 +12,8 @@ import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const MenuScreen = ({ navigation }) => {
+const MenuScreen = ({route, navigation }) => {
+  const { userData } = route.params;
   const [isEnabled, setIsEnabled] = useState(true);
 
   const toggleSwitch = () => setIsEnabled((prevState) => !prevState);
@@ -35,16 +36,16 @@ const MenuScreen = ({ navigation }) => {
         {/* Profile Section */}
         <View style={styles.profileContainer}>
           <Image
-            source={{ uri: "https://via.placeholder.com/100" }}
+            source={{ uri: userData.imageUrl }}
             style={styles.profileImage}
           />
-          <Text style={styles.profileName}>Sadaqat Rasool</Text>
+          <Text style={styles.profileName}>{userData.name}</Text>
         </View>
 
         {/* Account Settings */}
         <Text style={styles.sectionTitle}>Account Settings</Text>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile",{userData})}  style={styles.menuItem}>
           <Text style={styles.menuText}>Edit Profile</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>

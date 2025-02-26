@@ -15,6 +15,8 @@ import ChatDataScreen from './screens/ChatDataScreen';
 import CreatePostScreen from './screens/CreatePostScreen';
 import ChatBotScreen from './screens/ChatBotScreen';
 import AboutScreen from './screens/About/AboutScreen';
+import MenuScreen from './screens/MenuScreen';
+import ProfileScreen from './screens/Profile';
 
 // Create a Stack Navigator
 const Stack = createStackNavigator();
@@ -40,6 +42,9 @@ const App = () => {
         <Stack.Screen name="CreatePost" component={CreatePostScreen} options={{ title: 'Create Post' }} />
         <Stack.Screen name="ChatBot" component={ChatBotScreen} options={{ title: 'Crop Assistant Bot' }} />
         <Stack.Screen name="About" component={AboutScreen} options={{title:"About us"}} />
+        <Stack.Screen name="Menu" component={MenuScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

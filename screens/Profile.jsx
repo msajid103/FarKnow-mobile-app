@@ -3,10 +3,10 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal } fro
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from "react-native-vector-icons/MaterialIcons"; // Ensure this is installed for the back arrow
 
-const ProfileScreen = ({ navigation }) => {
-  const [profileImage, setProfileImage] = useState(require('../assets/logo.png'));
+const ProfileScreen = ({ route, navigation }) => {
+  const { userData } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
-  const [userData, setUserData] = useState({
+  const [user, setUserData] = useState({
     name: "Sadaqat Rasool",
     age: "23",
     mobile: "705526209",
@@ -39,7 +39,7 @@ const ProfileScreen = ({ navigation }) => {
 
       {/* Profile Image */}
       <View style={styles.profileContainer}>
-        <Image source={profileImage} style={styles.profileImage} />
+        <Image source={{ uri: userData.imageUrl }} style={styles.profileImage} />
         <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
           <Text style={styles.cameraText}>📷</Text>
         </TouchableOpacity>
@@ -51,11 +51,11 @@ const ProfileScreen = ({ navigation }) => {
 
       {/* Info Container */}
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Age: {userData.age}</Text>
-        <Text style={styles.label}>Mobile No: {userData.mobile}</Text>
-        <Text style={styles.label}>Village:  {userData.village}</Text>
-        <Text style={styles.label}>District: {userData.district}</Text>
-        <Text style={styles.label}>Area: {userData.area}</Text>
+        <Text style={styles.label}>Age: {user.age}</Text>
+        <Text style={styles.label}>Mobile No: {user.mobile}</Text>
+        <Text style={styles.label}>Village:  {user.village}</Text>
+        <Text style={styles.label}>District: {user.district}</Text>
+        <Text style={styles.label}>Area: {user.area}</Text>
       </View>
 
       {/* Logout Button */}

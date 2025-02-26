@@ -19,7 +19,7 @@ const Header = ({ userData }) => {
           <TouchableOpacity>
             <Icon name="search" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Menu',{userData})}>
             <Icon name="menu" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
         </View>
