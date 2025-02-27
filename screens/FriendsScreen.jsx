@@ -240,7 +240,7 @@ const FriendsScreen = ({ route }) => {
   if (filteredUsers.length === 0) {
     return (
       <>
-        <Header userData={currentUser} />
+        <Header  />
         <View style={styles.container}>
           <Text style={{ textAlign: 'center', marginTop: 20 }}>No users found.</Text>
         </View>

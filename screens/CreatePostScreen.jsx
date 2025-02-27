@@ -13,14 +13,14 @@ const CreatePostScreen = ({ route, navigation }) => {
     const [userId, setUserId] = useState(null);
 
     useEffect(() => {
-        // Retrieve the userId from Firebase Authentication
+        
         const user = auth().currentUser;
         if (user) {
             setUserId(user.uid);
-            console.log('User ID:', user.uid); // Debugging userId
+            console.log('User ID:', user.uid); 
         } else {
             Alert.alert('Error', 'User not logged in!');
-            navigation.goBack(); // Navigate back if no user is logged in
+            navigation.goBack(); 
         }
     }, []);
 
@@ -69,7 +69,7 @@ const CreatePostScreen = ({ route, navigation }) => {
 
     return (
         <>
-        <Header userData={userdata} />
+        <Header />
         <View style={styles.container}>
             <TextInput
                 style={styles.textInput}

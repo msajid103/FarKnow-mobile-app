@@ -81,7 +81,7 @@ const ChatDataScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Header userData={userdata} />
+      <Header  />
       <FlatList
         data={friendsData}
         renderItem={renderChatItem}

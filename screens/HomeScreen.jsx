@@ -5,44 +5,12 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Header from '../components/Header';
 import CardegoryList from '../components/Home/CardegoryList';
 import Posts from '../components/Home/Posts';
-const HomeScreen = ({ route, navigation }) => {
-  const { userId } = route.params;
-  const [userdata, setUserdata] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userDoc = await firestore()
-          .collection('Users')
-          .doc(userId)
-          .get();
-        if (userDoc.exists) {
-          setUserdata({ userId, ...userDoc.data() }); // Store data in useState
-        } else {
-          console.log('No such User');
-        }
-      } catch (error) {
-        console.log('Error fetching user data:', error);
-      } finally {
-        setLoading(false); // Stop loading once data is fetched
-      }
-    };
-    fetchUserData();
-  }, [userId]);
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="orange" />
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+const HomeScreen = ({navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header userData={userdata} />
+        <Header/>
         <CardegoryList />
         <Posts />
       </ScrollView>
@@ -51,16 +19,7 @@ const HomeScreen = ({ route, navigation }) => {
       <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('ChatBot')}>
         <Icon name="aliwangwang" size={30} color="black" />
       </TouchableOpacity>
-    </SafeAreaView>
-    // <FlatList
-    //   data={postsData}
-    //   keyExtractor={(item) => item.id}
-    //   renderItem={({ item }) => <PostCard post={item} />}
-    //   showsHorizontalScrollIndicator={false}
-    //   ListHeaderComponent={<Header userData={userdata} />}
-    //   ListFooterComponent={CardegoryList}
-    //   showsVerticalScrollIndicator={false}
-    // />
+    </SafeAreaView>   
   );
 };
 
@@ -71,13 +30,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   floatingButton: {
-    position: 'absolute', // Position fixed on the screen
-    bottom: 20, // Distance from the bottom
-    right: 20, // Distance from the right
-    backgroundColor: 'rgba(255, 156, 1, 0.7)', // Background color
+    position: 'absolute', 
+    bottom: 20, 
+    right: 20, 
+    backgroundColor: 'rgba(255, 156, 1, 0.7)', 
     width: 60,
     height: 60,
-    borderRadius: 30, // Make it circular
+    borderRadius: 30, 
     justifyContent: 'center',
     alignItems: 'center',
   },

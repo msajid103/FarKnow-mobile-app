@@ -8,21 +8,10 @@ const AboutScreen = ({ navigation }) => {
       source={require('../../assets/background.png')}
       style={styles.background}
       resizeMode="cover"
-    >
-      <TouchableOpacity style = {{borderRadius:10 ,padding:10, position:'absolute',left:10, top:10,}}
-            onPress={()=> navigation.goBack()}
-            >
-              <Text style={{color: 'white', fontWeight:900,}}>
-                Skip
-              </Text>
-            </TouchableOpacity>
+    >     
       <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
-
-        {/* <Text style={styles.projectTitle}>
-          Project Title
-        </Text> */}
+       
         <Text style={styles.projectHeading}>Farmer to Farmer Knowledge Sharing Mobile App</Text>
-        {/* <Text style={styles.textHeading}>About Us</Text> */}
 
         <Text style={styles.paraText}>This project empowers farmers by providing a platform to connect with expert farmers through chat for advice on farming, soil, and agriculture-related queries. It includes a chatbot to offer instant responses and guidance, enhancing accessibility to information. Farmers can post questions, share experiences, and receive location-based, timely notifications about crop diseases and updates. The app also promotes collaborative learning and supports sustainable farming practices. With its features, it bridges the knowledge gap, ensuring farmers have the tools to succeed</Text>
 

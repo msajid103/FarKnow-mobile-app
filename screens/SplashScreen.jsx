@@ -1,14 +1,30 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, ImageBackground, View, Text, ActivityIndicator } from 'react-native';
-import Logo from '../components/Logo'; // Ensure Logo does not render plain text
+import Logo from '../components/Logo'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SplashScreen = ({ navigation }) => {
+
+const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.replace('SocialLogin'); // Navigate to SocialLogin screen
-      // navigation.replace('Login'); // Uncomment if you want to navigate to Login instead
-    }, 2000); // Duration before navigation
-    return () => clearTimeout(timer); // Cleanup the timer on unmount
+    const checkUserId = async () => {
+      try {
+        const userId = await AsyncStorage.getItem('userId');
+        
+        if (userId) {
+          navigation.replace('App');
+        } else {
+          navigation.replace('Auth');
+        }
+      } catch (error) {
+        console.error('Error checking userId:', error);
+        navigation.replace('Auth'); 
+      }
+    };
+
+    
+    setTimeout(() => {
+      checkUserId();
+    }, 1000);
   }, [navigation]);
 
   return (

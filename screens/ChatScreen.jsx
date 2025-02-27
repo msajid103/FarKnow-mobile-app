@@ -75,22 +75,7 @@ const ChatScreen = ({ route }) => {
         );
     };
 
-    // Header with profile picture and name
-    // useEffect(() => {
-    //     navigation.setOptions({
-    //         headerTitle: () => (
-    //             <View style={styles.headerContainer}>
-    //                 <Image source={{ uri: userProfilePic }} style={styles.headerProfilePic} />
-    //                 <Text style={styles.headerUserName}>{userName}</Text>
-    //             </View>
-    //         ),
-    //         headerStyle: {
-    //             backgroundColor: '#128C7E', // WhatsApp-like color
-    //             height: 80,
-    //         },
-    //         headerTitleAlign: 'left',
-    //     });
-    // }, [navigation, userName, userProfilePic]);
+
 
     return (
         <KeyboardAvoidingView
@@ -99,9 +84,7 @@ const ChatScreen = ({ route }) => {
             keyboardVerticalOffset={90}
         >
             <View style={styles.header}>
-                {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={24} color="#fff" />
-                </TouchableOpacity> */}
+              
                 <Image source={{ uri: userProfilePic }} style={styles.headerProfilePic} />
                 <Text style={styles.headerUserName}>{userName}</Text>
             </View>
@@ -121,7 +104,7 @@ const ChatScreen = ({ route }) => {
                     placeholderTextColor="#aaa"
                 />
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    {/* <Ionicons name="send" size={20} color="#fff" /> */}
+                  
                     <Text style={{
                         color: '#FFF',
                         fontWeight: 'bold',

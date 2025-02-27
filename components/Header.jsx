@@ -1,13 +1,48 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
-const Header = ({ userData }) => {
+
+const Header = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const getIconColor = (screenName) => (route.name === screenName ? 'orange' : 'black');
+  const getIconColor = (screenName) => (route.name === screenName ? 'orange' : 'black'); 
 
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("userId");
+        const userId = jsonValue != null ? JSON.parse(jsonValue) : null;
+        const userDoc = await firestore()
+          .collection('Users')
+          .doc(userId)
+          .get();
+        if (userDoc.exists) {
+          setUserData({ userId, ...userDoc.data() }); // Store data in useState
+        } else {
+          console.log('No such User');
+        }
+      } catch (error) {
+        console.log('Error fetching user data:', error);
+      } finally {
+        setLoading(false); // Stop loading once data is fetched
+      }
+    };
+    fetchUserData();
+  }, []);
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="orange" />
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
   return (
     <View style={styles.headerContainer}>
       <View style={styles.profileSection}>
@@ -15,11 +50,11 @@ const Header = ({ userData }) => {
           <Image source={{ uri: userData.imageUrl }} style={styles.profileImage} />
           <Text style={styles.welcomeText}>{userData.name}!</Text>
         </View>
-        <View style={{flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity>
             <Icon name="search" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Menu',{userData})}>
+          <TouchableOpacity onPress={() => navigation.navigate('Menu', { userData })}>
             <Icon name="menu" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
         </View>

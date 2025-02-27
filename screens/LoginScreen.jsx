@@ -2,6 +2,8 @@ import { Text, StyleSheet, View, ScrollView, TextInput, TouchableOpacity, Alert,
 import React, { useState } from 'react';
 import { loginUser } from '../firebase/authService';
 import { createUserDocument } from '../firebase/firestoreService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
@@ -13,8 +15,10 @@ const LoginScreen = ({ navigation }) => {
             setLoading(true);
             const user = await loginUser(email, password);
             await createUserDocument(user.uid, user.email, user.displayName || "New User");
+            await AsyncStorage.setItem('userId', JSON.stringify(user.uid));
             setLoading(false);
-            navigation.navigate("Home", { userId: user.uid });
+            navigation.replace('App'); 
+
         } catch (e) {
             setLoading(false);
             if (e.code === "auth/network-request-failed") {

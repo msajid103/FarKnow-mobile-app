@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Dimensions } from "react-native";
-
 const { width, height } = Dimensions.get("window");
+import { logoutUser } from "../firebase/authService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const MenuScreen = ({route, navigation }) => {
   const { userData } = route.params;
@@ -18,9 +21,19 @@ const MenuScreen = ({route, navigation }) => {
 
   const toggleSwitch = () => setIsEnabled((prevState) => !prevState);
 
+  const handleLogout = async () => {
+    try {
+      logoutUser();
+      await AsyncStorage.removeItem('userId'); 
+      navigation.replace('Auth'); 
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong while logging out.');
+      console.error('Logout Error:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {/* Green Background at the Top */}
       <View style={styles.greenBackground}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -68,16 +81,20 @@ const MenuScreen = ({route, navigation }) => {
           />
         </View>
 
-        {/* More Section */}
-        <Text style={styles.sectionTitle}>More</Text>
+      
+        {/* <Text style={styles.sectionTitle}>More</Text> */}
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={()=> navigation.navigate('About')}>
           <Text style={styles.menuText}>About Us</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]}>
           <Text style={styles.menuText}>Terms and Conditions</Text>
+          <Icon name="chevron-right" size={24} color="#888" />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]} onPress={handleLogout}>
+          <Text style={styles.menuText}>Logout</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
       </View>

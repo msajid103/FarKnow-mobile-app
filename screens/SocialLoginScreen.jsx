@@ -3,52 +3,9 @@ import { View, Text, StyleSheet, ImageBackground, Pressable, TouchableOpacity, A
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/AntDesign';
 import Logo from '../components/Logo';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const SocialLoginScreen = ({ navigation }) => {
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: '144312177790-4bfne9k2jhhl4p4rspdjentkd06ue777.apps.googleusercontent.com',
-    });
-  }, [])
-
-  const signInWithGoogle = async (navigation) => {
-    try {
-      
-      await GoogleSignin.hasPlayServices();
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const userCredential = await auth().signInWithCredential(googleCredential);
-      const user = userCredential.user;
   
-      if (user) {
-        // Check if user exists in Firestore
-        const userDoc = await firestore().collection("Users").doc(user.uid).get();
-  
-        if (!userDoc.exists) {
-          // If first-time signup, store user info in Firestore
-          await firestore().collection("Users").doc(user.uid).set({
-            name: user.displayName || "New User",
-            email: user.email,
-            imageUrl: user.photoURL || "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png",
-            friends: [],
-            friendRequests: {
-              sent: [],
-              received: [],
-            },
-            chats: [],
-            createdAt: firestore.FieldValue.serverTimestamp(),
-            updatedAt: firestore.FieldValue.serverTimestamp(),
-          });
-        }
-  
-        const userId = user.uid;
-        navigation.navigate("Home", { userId });
-      }
-    } catch (error) {
-      Alert.alert("Autheentication Failed", `Error: ${error.message}`);
-    }
-  };
   return (
     <ImageBackground
       source={require('../assets/background.png')}
