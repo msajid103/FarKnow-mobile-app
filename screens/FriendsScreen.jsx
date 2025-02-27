@@ -276,12 +276,13 @@ const styles = StyleSheet.create({
   userCard: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent:"center",
     padding: 10,
     marginBottom: 20,
     borderBottomWidth: 2,
     borderBottomColor: '#ddd',
     borderRadius: 10,
-    // shadowColor: '#000',
+    shadowColor: '#000',
     // shadowOpacity: 0.1,
     // shadowRadius: 5,
     // elevation: 3,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   },
   acceptButton: {
     backgroundColor: 'orange',
-    padding: 8,
+    padding: 12,
     borderRadius: 5,
     marginRight: 5,
   },
@@ -327,9 +328,12 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: 'orange',
-    width: 90,
-    padding: 8,
-    borderRadius: 5,
+    width: "37%",
+    padding: 10,
+    borderRadius:10,
+    borderWidth:2,
+    borderColor: "yellow",
+
   },
   buttonText: {
     color: 'white',

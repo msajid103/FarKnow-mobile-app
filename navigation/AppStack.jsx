@@ -12,6 +12,8 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import MenuScreen from '../screens/MenuScreen';
 import ProfileScreen from '../screens/Profile';
 import AboutScreen from '../screens/About/AboutScreen';
+import ChangeLanguageScreen from '../screens/ChangeLanguageScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 const AppStack = createStackNavigator();
 
@@ -24,9 +26,18 @@ const AppStackScreen = () => (
     <AppStack.Screen name="ChatData" component={ChatDataScreen} options={{ title: 'Chat Data' }} />
     <AppStack.Screen name="CreatePost" component={CreatePostScreen} options={{ title: 'Create Post' }} />
     <AppStack.Screen name="ChatBot" component={ChatBotScreen} options={{ title: 'Crop Assistant Bot' }} />
-    <AppStack.Screen name="Menu" component={MenuScreen} />
+    <AppStack.Screen name="Menu" component={MenuScreen} options={{headerShown: true,  headerStyle: { backgroundColor: "#32CD32" } }} />
     <AppStack.Screen name="Profile" component={ProfileScreen} />
-    <AppStack.Screen name="About" component={AboutScreen} options={{ headerShown: true }} />
+    <AppStack.Screen name="About" component={AboutScreen} options={{ 
+    headerShown: true, 
+    headerTransparent: true, 
+    headerStyle: { backgroundColor: 'transparent' },
+    headerTitleStyle: { color: 'white' }, // Set text color to white
+    headerTintColor: 'white' // Ensures back button and icons are white
+  }} />
+    <AppStack.Screen name="Changelanguage" component={ChangeLanguageScreen}  />
+    <AppStack.Screen name="ChangePassword" component={ForgotPasswordScreen}  />
+
   </AppStack.Navigator>
 );
 

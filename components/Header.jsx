@@ -80,9 +80,9 @@ const Header = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     padding: 10,
-    backgroundColor: 'green',
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
+    backgroundColor: "#32CD32",
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
     elevation: 4, // Shadow effect on Android
   },
   profileSection: {
@@ -113,9 +113,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingVertical: 10,
     marginTop: 5,
+
   },
   icon: {
     marginHorizontal: 10,
+    
   },
 });
 

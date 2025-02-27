@@ -34,14 +34,7 @@ const MenuScreen = ({route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.greenBackground}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Icon name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.menuTitle}>Menu</Text>
+      <View style={styles.greenBackground}>        
       </View>
       
       <View style={styles.card}>     
@@ -61,12 +54,12 @@ const MenuScreen = ({route, navigation }) => {
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity onPress={() => navigation.navigate("ChangePassword")} style={styles.menuItem}>
           <Text style={styles.menuText}>Change Password</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity onPress={() => navigation.navigate("Changelanguage",{userData})}  style={styles.menuItem}>
           <Text style={styles.menuText}>Change Language</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
@@ -82,14 +75,14 @@ const MenuScreen = ({route, navigation }) => {
         </View>
 
       
-        {/* <Text style={styles.sectionTitle}>More</Text> */}
+        <Text style={styles.sectionTitle}>More</Text>
 
         <TouchableOpacity style={styles.menuItem} onPress={()=> navigation.navigate('About')}>
           <Text style={styles.menuText}>About Us</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]}>
+        <TouchableOpacity style={[styles.menuItem]}>
           <Text style={styles.menuText}>Terms and Conditions</Text>
           <Icon name="chevron-right" size={24} color="#888" />
         </TouchableOpacity>
@@ -108,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
   },
   greenBackground: {
-    height: height * 0.25,
+    height: height * 0.1,
     backgroundColor: "#32CD32",
     justifyContent: "center",
     alignItems: "center",
@@ -123,12 +116,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-  backButton: {
-    position: "absolute",
-    left: width * 0.05,
-    top: height * 0.07,
-  },
+ 
   menuTitle: {
+    height: height * 0.14,
     fontSize: width * 0.07, // Larger and bold for prominence
     fontWeight: "600",
     color: "black",

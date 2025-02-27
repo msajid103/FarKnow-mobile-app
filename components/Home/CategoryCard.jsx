@@ -21,10 +21,12 @@ const styles = StyleSheet.create({
   card: { 
     width:170,
     backgroundColor: '#f8f8f8',
+    borderColor:"yellow",
+    borderWidth: 1,
     margin: 5,
     borderRadius: 10,
     alignItems: 'center',
-    elevation: 3, // Shadow effect for Android
+    elevation: 8, // Shadow effect for Android
   
   },
   cardImage: {

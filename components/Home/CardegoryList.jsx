@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10, // Space below the title
+        marginLeft:"2%"
     },
     categoryList: {
         paddingHorizontal: 10, // Optional: Padding for the category list
