@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#32CD32",
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
-    elevation: 4, // Shadow effect on Android
+    elevation: 4,
   },
   profileSection: {
     flexDirection: 'row',

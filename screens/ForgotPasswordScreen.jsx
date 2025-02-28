@@ -16,16 +16,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
 
   return (
-    <View style={styles.container}>
-      {/* Green Header */}
-      <View style={styles.greenHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Change Password</Text>
-      </View>
-
-      {/* Instruction Text */}
+    <View style={styles.container}>    
       <Text style={styles.instructionText}>
         Please enter your email to reset the password
       </Text>
@@ -57,33 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-  },
-  greenHeader: {
-    height: height * 0.12,
-    backgroundColor: "#32CD32",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: width * 0.05,
-    borderBottomLeftRadius: 18,
-    borderBottomRightRadius: 18,
-    width: "100%",
-    position: "absolute",
-    top: 0,
-  },
-  headerTitle: {
-    fontSize: width * 0.05, // Scales with screen width (~20px on 400px wide screen)
-    fontWeight: "700",
-    top: height * 0.016,
-    paddingRight: 28, // Centers vertically with adjustment
-    color: "black",
-    flex: 1,
-    textAlign: "center",
-    letterSpacing: 0.5, // Adds elegance
-  },
-  backButton: {
-    marginRight: width * 0.02,
-    top: height * 0.017, // Centers vertically with adjustment
-  },
+  }, 
   instructionText: {
     fontSize: width * 0.04,
     color: "#888",
