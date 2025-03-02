@@ -30,32 +30,30 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginTop: 200,
     padding: 20,
-    backgroundColor: "white",
-    // alignItems:'center',
-    borderRadius: 20,
+    backgroundColor: "rgba(83, 238, 22, 0.58)",
+    borderRadius: 30,
+
+
   },
-  projectTitle: {
-    color: 'black',
-    marginTop: 20,
-    marginLeft: 20,
-    fontWeight: '600'
-  },
+
   projectHeading: {
     color: 'orange',
     fontWeight: '900',
     textAlign: 'center',
-    fontSize: 30
+    fontSize: 30,
 
   },
   textHeading: {
     color: "black",
-    fontSize: 20,
+    fontSize: 27,
     fontWeight: "bold",
   },
   paraText: {
-    // padding:10,
+    padding:3,
     marginTop: 15,
     textAlign: 'left',
+    fontSize: 14,
+    color: 'black',
   },
   sectionTitle: {
     fontSize: 20,

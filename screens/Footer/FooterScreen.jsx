@@ -87,11 +87,12 @@ const FooterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
+    
     },
     mainContainer: {
         marginTop: 20,
         // padding: 20,
-        backgroundColor: "white",
+        backgroundColor: "transparent",
         alignItems:'center',
         borderRadius: 20,
     },
@@ -118,6 +119,9 @@ const styles = StyleSheet.create({
         marginTop: 15,
         textAlign: 'left',
     },
+    infoText: {
+        fontSize:15
+    }, 
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     logoContainer:{
-      marginVertical:10,  
+      marginVertical:10,
       marginBottom:50
     },
     logo: {
