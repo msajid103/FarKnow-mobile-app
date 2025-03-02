@@ -28,14 +28,7 @@ const ChangeLanguageScreen = ({route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.greenHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Profile</Text>
-      </View>
-
-      {/* Centered Logo */}
+      
       <Image
         source={require("../assets/logo.png")}
         style={styles.centeredLogo}
@@ -74,38 +67,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     alignItems: "center",
   },
-  greenHeader: {
-    height: height * 0.12,
-    backgroundColor: "#32CD32",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: width * 0.05,
-    borderBottomLeftRadius: 18,
-    borderBottomRightRadius: 18,
-    width: "100%",
-    position: "absolute",
-    top: 0,
-  },
-
-  backButton: {
-    marginRight: width * 0.02,
-    top: height * 0.017, // Centers vertically with adjustment
-  },
-  headerTitle: {
-    fontSize: width * 0.05, // Scales with screen width (~20px on 400px wide screen)
-    fontWeight: "700",
-    top: height * 0.016,
-    paddingRight: 28, // Centers vertically with adjustment
-    color: "black",
-    flex: 1,
-    textAlign: "center",
-    letterSpacing: 0.5, // Adds elegance
-  },
   centeredLogo: {
     width: width * 0.6, // 60% of screen width
     height: width * 0.6, // Maintains aspect ratio (assuming square logo)
     position: "absolute",
-    top: height * 0.45, // Centers vertically with adjustment
+    top: height * 0.37, // Centers vertically with adjustment
     left: "50%",
     transform: [{ translateX: -(width * 0.6) / 2 }], // Centers horizontally
     zIndex: 0, // Below card and header
@@ -117,7 +83,7 @@ const styles = StyleSheet.create({
     borderColor: "#FFD700", // Brighter yellow border (gold)
     borderWidth: 2,
     marginHorizontal: width * 0.05, // Scales with screen width
-    marginTop: height * 0.25, // Scales with screen height
+    marginTop: height * 0.12, // Scales with screen height
     paddingVertical: height * 0.05, // Scales padding
     paddingHorizontal: width * 0.06, // Scales padding
     width: "90%",

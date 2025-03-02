@@ -132,11 +132,11 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         width: '100%',
-        marginVertical: 10,
+        marginVertical: 5,
         alignItems:'center'
       },
     subtitle: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: '600',
         color: '#FF8C00', // Orange accent color
         textAlign: 'center',

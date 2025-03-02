@@ -27,13 +27,7 @@ const ProfileScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.greenHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Profile</Text>
-      </View>
+    <View style={styles.container}>     
       <View style={styles.profileContainer}>
         <Image source={{ uri: userData.imageUrl }} style={styles.profileImage} />
         <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
@@ -79,20 +73,7 @@ const ProfileScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', backgroundColor: 'white' },
-  greenHeader: {
-    height: height * 0.12,
-    backgroundColor: "#32CD32",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: width * 0.05,
-    borderBottomLeftRadius: 18,
-    borderBottomRightRadius: 18,
-    width: "100%",
-    position: "absolute",
-    top: 0,
-  },
-  headerTitle: { fontSize: width * 0.06, fontWeight: "bold", color: "black", flex: 1, textAlign: "center" },
-  profileContainer: { marginTop: height * 0.19, alignItems: 'center' },
+  profileContainer: { marginTop: height * 0.076, alignItems: 'center' },
   profileImage: { width: width * 0.4, height: width * 0.4, borderRadius: width * 0.2 },
   cameraIcon: { position: 'absolute', bottom: 0, right: 10, backgroundColor: 'gray', borderRadius: 20, padding: 5 },
   name: { fontSize: width * 0.05, fontWeight: 'bold', marginTop: 20 },
