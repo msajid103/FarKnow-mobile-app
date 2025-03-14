@@ -45,9 +45,7 @@ const ProfileScreen = ({ route, navigation }) => {
         <Text style={styles.label}>District: {user.district}</Text>
         <Text style={styles.label}>Area: {user.area}</Text>
       </View>
-      <TouchableOpacity style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Log out</Text>
-      </TouchableOpacity>
+      
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

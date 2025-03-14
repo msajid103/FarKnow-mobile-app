@@ -1,5 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useUser } from '../context/UserContext';
+import Header from '../components/Header';
 
 // Import screens
 import HomeScreen from '../screens/HomeScreen';
@@ -17,23 +19,82 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 const AppStack = createStackNavigator();
 
-const AppStackScreen = () => (
-  <AppStack.Navigator screenOptions={{ headerShown: false }}>
-    <AppStack.Screen name="Home" component={HomeScreen} />
-    <AppStack.Screen name="Chat" component={ChatScreen} />
-    <AppStack.Screen name="Friends" component={FriendsScreen} />
-    <AppStack.Screen name="Test" component={TestScreen} />
-    <AppStack.Screen name="ChatData" component={ChatDataScreen} />
-    <AppStack.Screen name="CreatePost" component={CreatePostScreen} />
-    <AppStack.Screen name="ChatBot" component={ChatBotScreen} />
-    <AppStack.Screen name="Menu" component={MenuScreen} options={menuOptions} />
-    <AppStack.Screen name="Profile" component={ProfileScreen} options={defaultHeaderOptions} />
-    <AppStack.Screen name="About" component={AboutScreen} options={aboutOptions}/>
-    <AppStack.Screen name="Changelanguage" component={ChangeLanguageScreen} options={defaultHeaderOptions} />
-    <AppStack.Screen name="ChangePassword" component={ForgotPasswordScreen} options={defaultHeaderOptions} />
+// Create a wrapper component for screens that need the Header
+const withHeader = (Component) => (props) => {
+  return (
+    <>
+      <Header />
+      <Component {...props} />
+    </>
+  );
+};
 
-  </AppStack.Navigator>
-);
+const AppStackScreen = () => {
+  const { loading } = useUser();
+
+  if (loading) {
+    return null; // Or a loading screen
+  }
+
+  return (
+    <AppStack.Navigator screenOptions={{ headerShown: false }}>
+      <AppStack.Screen 
+        name="Home" 
+        component={withHeader(HomeScreen)} 
+      />
+      <AppStack.Screen 
+        name="Chat" 
+        component={withHeader(ChatScreen)} 
+      />
+      <AppStack.Screen 
+        name="Friends" 
+        component={withHeader(FriendsScreen)} 
+      />
+      <AppStack.Screen 
+        name="Test" 
+        component={withHeader(TestScreen)} 
+      />
+      <AppStack.Screen 
+        name="ChatData" 
+        component={withHeader(ChatDataScreen)} 
+      />
+      <AppStack.Screen 
+        name="CreatePost" 
+        component={withHeader(CreatePostScreen)} 
+      />
+      <AppStack.Screen 
+        name="ChatBot" 
+        component={withHeader(ChatBotScreen)} 
+      />
+      <AppStack.Screen 
+        name="Menu" 
+        component={MenuScreen} 
+        options={menuOptions} 
+      />
+      <AppStack.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={defaultHeaderOptions} 
+      />
+      <AppStack.Screen 
+        name="About" 
+        component={AboutScreen} 
+        options={aboutOptions}
+      />
+      <AppStack.Screen 
+        name="Changelanguage" 
+        component={ChangeLanguageScreen} 
+        options={defaultHeaderOptions} 
+      />
+      <AppStack.Screen 
+        name="ChangePassword" 
+        component={ForgotPasswordScreen} 
+        options={defaultHeaderOptions} 
+      />
+    </AppStack.Navigator>
+  );
+};
+
 
 const defaultHeaderOptions = {
   headerShown: true,

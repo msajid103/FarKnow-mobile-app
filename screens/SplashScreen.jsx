@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { StyleSheet, ImageBackground, View, Text, ActivityIndicator } from 'react-native';
 import Logo from '../components/Logo'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser } from '../context/UserContext';
 
 
 const SplashScreen = ({navigation}) => {
+  const { loading } = useUser();
   useEffect(() => {
     const checkUserId = async () => {
       try {
@@ -22,10 +24,12 @@ const SplashScreen = ({navigation}) => {
     };
 
     
-    setTimeout(() => {
-      checkUserId();
-    }, 1000);
-  }, [navigation]);
+    if (!loading) {
+      setTimeout(() => {
+        checkUserId();
+      }, 1000);
+    }
+  }, [navigation, loading]);
 
   return (
     <ImageBackground

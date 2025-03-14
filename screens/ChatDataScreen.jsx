@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, ScrollView,ActivityIndicator , TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Header from '../components/Header';
+import { useUser } from '../context/UserContext';
 
 const ChatDataScreen = ({ route, navigation }) => {
   const [friendsData, setFriendsData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userdata = route.params;
+  const {userData} = useUser();
+  const userdata = userData;
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -81,7 +83,6 @@ const ChatDataScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Header  />
       <FlatList
         data={friendsData}
         renderItem={renderChatItem}

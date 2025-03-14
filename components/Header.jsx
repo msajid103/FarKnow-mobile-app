@@ -1,81 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import firestore from '@react-native-firebase/firestore';
-
+import { useUser } from '../context/UserContext';
 
 const Header = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { userData, loading, error } = useUser();
+  
   const getIconColor = (screenName) => (route.name === screenName ? 'orange' : 'black'); 
 
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem("userId");
-        const userId = jsonValue != null ? JSON.parse(jsonValue) : null;
-        const userDoc = await firestore()
-          .collection('Users')
-          .doc(userId)
-          .get();
-        if (userDoc.exists) {
-          setUserData({ userId, ...userDoc.data() }); // Store data in useState
-        } else {
-          console.log('No such User');
-        }
-      } catch (error) {
-        console.log('Error fetching user data:', error);
-      } finally {
-        setLoading(false); // Stop loading once data is fetched
-      }
-    };
-    fetchUserData();
-  }, []);
-    if (loading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="orange" />
-          <Text>Loading...</Text>
+
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Loading user data...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Something went wrong</Text>
+        <TouchableOpacity 
+          style={styles.retryButton}
+          onPress={() => navigation.replace('Splash')}
+        >
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // If userData is null or undefined, show a placeholder
+  if (!userData) {
+    return (
+      <View style={styles.headerContainer}>
+        <View style={styles.profileSection}>
+          <View style={styles.profileContent}>
+            <View style={styles.placeholderImage} />
+            <Text style={styles.welcomeText}>Welcome!</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity>
+              <Icon name="search" size={35} color="black" style={styles.icon} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Menu')}>
+              <Icon name="menu" size={35} color="black" style={styles.icon} />
+            </TouchableOpacity>
+          </View>
         </View>
-      );
-    }
+        <View style={styles.iconContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Icon name="home" size={35} color={getIconColor('Home')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Friends')}>
+            <Icon name="person-add" size={35} color={getIconColor('Friends')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('CreatePost')}>
+            <Icon name="edit" size={35} color={getIconColor('CreatePost')} style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ChatData')}>
+            <Icon name="chat" size={35} color={getIconColor('ChatData')} style={styles.icon} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.profileSection}>
         <View style={styles.profileContent}>
-          <Image source={{ uri: userData.imageUrl }} style={styles.profileImage} />
-          <Text style={styles.welcomeText}>{userData.name}!</Text>
+          {userData.imageUrl ? (
+            <Image 
+              source={{ uri: userData.imageUrl }} 
+              style={styles.profileImage}
+              defaultSource={require('../assets/bg.jpg')} // Add a default image
+            />
+          ) : (
+            <View style={styles.placeholderImage} />
+          )}
+          <Text style={styles.welcomeText}>{userData.name || 'User'}!</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity>
             <Icon name="search" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Menu', { userData })}>
+          <TouchableOpacity onPress={() => navigation.navigate('Menu')}>
             <Icon name="menu" size={35} color="black" style={styles.icon} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home', userData)}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <Icon name="home" size={35} color={getIconColor('Home')} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Friends', userData)}>
+        <TouchableOpacity onPress={() => navigation.navigate('Friends')}>
           <Icon name="person-add" size={35} color={getIconColor('Friends')} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('CreatePost', userData)}>
+        <TouchableOpacity onPress={() => navigation.navigate('CreatePost')}>
           <Icon name="edit" size={35} color={getIconColor('CreatePost')} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ChatData', userData)}>
+        <TouchableOpacity onPress={() => navigation.navigate('ChatData')}>
           <Icon name="chat" size={35} color={getIconColor('ChatData')} style={styles.icon} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -120,5 +158,6 @@ const styles = StyleSheet.create({
     
   },
 });
+
 
 export default Header;

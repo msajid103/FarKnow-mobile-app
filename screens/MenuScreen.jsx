@@ -12,11 +12,12 @@ import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 import { logoutUser } from "../firebase/authService";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUser } from "../context/UserContext";
 
 
 
-const MenuScreen = ({route, navigation }) => {
-  const { userData } = route.params;
+const MenuScreen = ({navigation }) => {
+  const { userData } = useUser();
   const [isEnabled, setIsEnabled] = useState(true);
 
   const toggleSwitch = () => setIsEnabled((prevState) => !prevState);

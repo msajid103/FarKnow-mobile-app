@@ -6,12 +6,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AppStackScreen from './navigation/AppStack';
 import AuthStackScreen from './navigation/AuthStack';
 import SplashScreen from './screens/SplashScreen';
+import { UserProvider } from './context/UserContext';
 
 const RootStack = createStackNavigator();
 
 
 const App = () => {
   return (
+    <UserProvider>
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         <RootStack.Screen name="Splash" component={SplashScreen} />
@@ -19,6 +21,7 @@ const App = () => {
         <RootStack.Screen name="App" component={AppStackScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
+    </UserProvider>
   );
 };
 

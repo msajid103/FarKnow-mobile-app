@@ -69,7 +69,6 @@ const CreatePostScreen = ({ route, navigation }) => {
 
     return (
         <>
-        <Header />
         <View style={styles.container}>
             <TextInput
                 style={styles.textInput}

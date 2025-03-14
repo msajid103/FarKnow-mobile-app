@@ -10,7 +10,6 @@ const HomeScreen = ({navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header/>
         <CardegoryList />
         <Posts />
       </ScrollView>
